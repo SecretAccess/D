@@ -53,11 +53,6 @@
             0% { text-shadow: 0 0 5px gold, 0 0 10px gold; }
             100% { text-shadow: 0 0 20px gold, 0 0 30px gold; }
         }
-        footer {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #666;
-        }
     </style>
 </head>
 <body>
@@ -65,7 +60,7 @@
         キャッシュバックキャンペーン
     </header>
     <h1>特定の順番で数字をクリックして、リワードを手に入れよう！</h1>
-    <p>下の数字を正しい順番でクリックしてください。</p>
+    <p id="dailyChallenge"></p>
 
     <div id="numbers">
         <div class="number" onclick="completeAction(0)">0</div>
@@ -85,13 +80,22 @@
         <a href="https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81" target="_blank" class="button divine">リワードをゲットする</a>
     </div>
 
-    <footer>
-        © 2024 キャッシュバックキャンペーン. All rights reserved.
-    </footer>
-
     <script>
         let clickOrder = [];
         const correctOrder = [0, 2, 2, 5, 9, 1, 2, 3, 1, 4]; // 正しい順番
+
+        // 日付ごとのチャレンジを設定
+        const dailyChallenges = {
+            "2024-11-05": "今日は0をクリックしてください。",
+            "2024-11-06": "今日は1をクリックしてください。",
+            "2024-11-07": "今日は2をクリックしてください.",
+            // 他の日付のチャレンジを追加
+        };
+
+        // 今日の日付を取得してチャレンジを表示
+        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD形式で取得
+        const challengeText = dailyChallenges[today] || "今日は新しいチャレンジはありません！";
+        document.getElementById('dailyChallenge').innerText = challengeText;
 
         function completeAction(number) {
             clickOrder.push(number);
