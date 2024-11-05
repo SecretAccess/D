@@ -12,7 +12,7 @@
             font-family: Arial, sans-serif;
             overflow: hidden;
         }
-        .button {
+        .button, .action-item {
             display: inline-block;
             padding: 20px;
             margin: 20px;
@@ -22,6 +22,10 @@
             text-decoration: none;
             color: white;
             font-size: 24px;
+            transition: transform 0.3s;
+        }
+        .button:hover, .action-item:hover {
+            transform: scale(1.1);
         }
         .hidden {
             display: none;
@@ -42,25 +46,33 @@
 </head>
 <body>
     <h1>不思議なサイトへようこそ！</h1>
-    <p>下のボタンを3回クリックして、リンクに進みましょう。</p>
+    <p>以下のアクションを完了してください。</p>
 
-    <div class="button" id="actionButton">クリックする</div>
+    <div class="action-item" id="action1">アイテム1をクリック</div>
+    <div class="action-item" id="action2">アイテム2をクリック</div>
+    <div class="action-item" id="action3">アイテム3をクリック</div>
+
     <p id="status">まだ準備ができていません。</p>
     <div id="finalLink" class="hidden">
         <a href="https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81" target="_blank" class="button">ここをクリックしてメッセージを送信</a>
     </div>
 
     <script>
-        let clickCount = 0;
+        let actionCount = 0;
 
-        document.getElementById('actionButton').onclick = function() {
-            clickCount++;
-            document.getElementById('status').innerText = `クリック回数: ${clickCount}回`;
-            if (clickCount >= 3) {
+        function completeAction() {
+            actionCount++;
+            document.getElementById('status').innerText = `${actionCount}つのアクションが完了しました。`;
+
+            if (actionCount >= 3) {
                 document.getElementById('finalLink').classList.remove('hidden');
                 document.getElementById('status').innerText = 'すべてのアクションが完了しました！';
             }
-        };
+        }
+
+        document.getElementById('action1').onclick = completeAction;
+        document.getElementById('action2').onclick = completeAction;
+        document.getElementById('action3').onclick = completeAction;
     </script>
 </body>
 </html>
