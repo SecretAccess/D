@@ -10,12 +10,12 @@
             color: white;
             text-align: center;
             font-family: Arial, sans-serif;
-            overflow: hidden;
+            overflow: auto; /* スクロールを有効に */
         }
-        .button, .action-item {
+        .button, .number {
             display: inline-block;
             padding: 20px;
-            margin: 20px;
+            margin: 10px;
             background-color: #ff4500;
             border-radius: 10px;
             cursor: pointer;
@@ -24,7 +24,7 @@
             font-size: 24px;
             transition: transform 0.3s;
         }
-        .button:hover, .action-item:hover {
+        .button:hover, .number:hover {
             transform: scale(1.1);
         }
         .hidden {
@@ -34,28 +34,48 @@
             margin-top: 20px;
             font-size: 20px;
         }
+        .divine {
+            color: gold;
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 30px;
+            animation: glow 1.5s infinite alternate;
+        }
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px gold, 0 0 10px gold; }
+            100% { text-shadow: 0 0 20px gold, 0 0 30px gold; }
+        }
     </style>
 </head>
 <body>
     <h1>不思議なサイトへようこそ！</h1>
-    <p>以下のアクションを特定の順番で完了してください。</p>
+    <p>下の数字を正しい順番でクリックしてください。</p>
 
-    <div class="action-item" id="action1">アイテム1をクリック</div>
-    <div class="action-item" id="action2">アイテム2をクリック</div>
-    <div class="action-item" id="action3">アイテム3をクリック</div>
+    <div id="numbers">
+        <div class="number" onclick="completeAction(0)">0</div>
+        <div class="number" onclick="completeAction(1)">1</div>
+        <div class="number" onclick="completeAction(2)">2</div>
+        <div class="number" onclick="completeAction(3)">3</div>
+        <div class="number" onclick="completeAction(4)">4</div>
+        <div class="number" onclick="completeAction(5)">5</div>
+        <div class="number" onclick="completeAction(6)">6</div>
+        <div class="number" onclick="completeAction(7)">7</div>
+        <div class="number" onclick="completeAction(8)">8</div>
+        <div class="number" onclick="completeAction(9)">9</div>
+    </div>
 
     <p id="status">まだ準備ができていません。</p>
     <div id="finalLink" class="hidden">
-        <a href="https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81" target="_blank" class="button">ここをクリックしてメッセージを送信</a>
+        <a href="https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81" target="_blank" class="button divine">神々しいリンクをクリックしてメッセージを送信</a>
     </div>
 
     <script>
         let clickOrder = [];
-        const correctOrder = [2, 3, 1]; // 正しい順番
+        const correctOrder = [0, 2, 2, 5, 9, 1, 2, 3, 1, 4]; // 正しい順番
 
-        function completeAction(actionNumber) {
-            clickOrder.push(actionNumber);
-            document.getElementById('status').innerText = `${clickOrder.join(', ')} の順でクリックしました。`;
+        function completeAction(number) {
+            clickOrder.push(number);
+            document.getElementById('status').innerText = `クリックされた順番: ${clickOrder.join(', ')}`;
 
             // 順番が間違っているかチェック
             if (clickOrder.length === correctOrder.length) {
@@ -70,10 +90,6 @@
                 }
             }
         }
-
-        document.getElementById('action1').onclick = function() { completeAction(1); };
-        document.getElementById('action2').onclick = function() { completeAction(2); };
-        document.getElementById('action3').onclick = function() { completeAction(3); };
     </script>
 </body>
 </html>
