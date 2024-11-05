@@ -13,20 +13,23 @@
         }
         .button {
             display: inline-block;
-            width: 200px; /* ボタンの幅 */
-            height: 200px; /* ボタンの高さ */
+            width: 150px; /* ボタンの幅 */
+            height: 150px; /* ボタンの高さ */
             background-color: #4caf50;
             border-radius: 75px; /* 丸いボタンにする */
             line-height: 150px; /* テキストを中央に配置 */
             color: white;
             font-size: 24px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.1s; /* へこみ演出のトランジション */
             margin: 20px;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
         .button:hover {
             background-color: #45a049;
+        }
+        .button:active {
+            transform: scale(0.95); /* ボタンを押したときに少し縮む */
         }
         #status {
             font-size: 20px;
@@ -96,6 +99,9 @@
             if (gameActive) {
                 score++;
                 document.getElementById('status').innerText = `スコア: ${score}`;
+                if (navigator.vibrate) {
+                    navigator.vibrate(100); // 振動を実行
+                }
                 if (score >= 80) {
                     document.getElementById('finalLink').classList.remove('hidden');
                     alert('おめでとうございます！リワードをゲットしました！');
