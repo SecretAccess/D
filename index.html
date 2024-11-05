@@ -53,6 +53,19 @@
             width: 300px; /* イラストの幅 */
             height: auto; /* 自動で高さ調整 */
         }
+        .reward-button {
+            display: none; /* 最初は非表示 */
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ff4500;
+            color: white;
+            font-size: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .reward-button:hover {
+            background-color: #e63946;
+        }
     </style>
 </head>
 <body>
@@ -62,8 +75,9 @@
     <div class="button" id="clickButton">タップ！</div>
     <p id="status">スコア: 0</p>
     <p id="timer" style="margin-top: 20px;">残り時間: 10秒</p>
+
     <div id="finalLink" class="hidden">
-        <a href="https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81" target="_blank" class="divine">リワードをゲットする</a>
+        <button class="reward-button" id="rewardButton">リワードをゲットする</button>
     </div>
 
     <script>
@@ -71,7 +85,6 @@
         let timeLeft = 10;
         let gameActive = false;
 
-        // 学校のイラストの配列
         const schoolImages = [
             "https://example.com/school1.png", // 通常のイラスト
             "https://example.com/school2.png", // 少し壊れたイラスト
@@ -79,7 +92,6 @@
             "https://example.com/school4.png", // 完全に壊れたイラスト
         ];
 
-        // ゲーム開始
         function startGame() {
             score = 0;
             timeLeft = 10;
@@ -87,6 +99,7 @@
             document.getElementById('status').innerText = `スコア: ${score}`;
             document.getElementById('timer').innerText = `残り時間: ${timeLeft}秒`;
             document.getElementById('finalLink').classList.add('hidden'); // リンクを隠す
+            document.getElementById('rewardButton').style.display = 'none'; // ボタンを非表示
 
             const timer = setInterval(() => {
                 timeLeft--;
@@ -96,6 +109,7 @@
                     gameActive = false;
                     if (score >= 80) {
                         document.getElementById('finalLink').classList.remove('hidden');
+                        document.getElementById('rewardButton').style.display = 'inline-block'; // リワードボタンを表示
                         alert('おめでとうございます！リワードをゲットしました！');
                     } else {
                         alert(`時間切れ！最終スコア: ${score}`);
@@ -104,7 +118,6 @@
             }, 1000);
         }
 
-        // クリックイベント
         document.getElementById('clickButton').onclick = function() {
             if (gameActive) {
                 score++;
@@ -116,8 +129,9 @@
                     document.getElementById('schoolImage').src = schoolImages[imageIndex];
                 }
                 
-                if (score >= 50) {
+                if (score >= 80) {
                     document.getElementById('finalLink').classList.remove('hidden');
+                    document.getElementById('rewardButton').style.display = 'inline-block'; // リワードボタンを表示
                     alert('おめでとうございます！リワードをゲットしました！');
                     gameActive = false; // ゲームを終了
                 }
@@ -126,7 +140,10 @@
             }
         };
 
-        // 最初のゲームを開始
+        document.getElementById('rewardButton').onclick = function() {
+            window.open("https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81", "_blank"); // リワードのリンクを新しいタブで開く
+        };
+
         startGame();
     </script>
 </body>
