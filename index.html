@@ -12,14 +12,18 @@
             font-family: Arial, sans-serif;
         }
         .button {
-            padding: 20px;
-            margin: 20px;
+            display: inline-block;
+            width: 150px; /* ボタンの幅 */
+            height: 150px; /* ボタンの高さ */
             background-color: #4caf50;
-            border-radius: 5px;
-            cursor: pointer;
+            border-radius: 75px; /* 丸いボタンにする */
+            line-height: 150px; /* テキストを中央に配置 */
             color: white;
             font-size: 24px;
             transition: background-color 0.3s;
+            margin: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
         .button:hover {
             background-color: #45a049;
@@ -60,4 +64,50 @@
     <script>
         let score = 0;
         let timeLeft = 10;
-        let gameActive = 
+        let gameActive = false;
+
+        // ゲーム開始
+        function startGame() {
+            score = 0;
+            timeLeft = 10;
+            gameActive = true;
+            document.getElementById('status').innerText = `スコア: ${score}`;
+            document.getElementById('timer').innerText = `残り時間: ${timeLeft}秒`;
+            document.getElementById('finalLink').classList.add('hidden'); // リンクを隠す
+
+            const timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').innerText = `残り時間: ${timeLeft}秒`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    gameActive = false;
+                    if (score >= 80) {
+                        document.getElementById('finalLink').classList.remove('hidden');
+                        alert('おめでとうございます！リワードをゲットしました！');
+                    } else {
+                        alert(`時間切れ！最終スコア: ${score}`);
+                    }
+                }
+            }, 1000);
+        }
+
+        // クリックイベント
+        document.getElementById('clickButton').onclick = function() {
+            if (gameActive) {
+                score++;
+                document.getElementById('status').innerText = `スコア: ${score}`;
+                if (score >= 80) {
+                    document.getElementById('finalLink').classList.remove('hidden');
+                    alert('おめでとうございます！リワードをゲットしました！');
+                    gameActive = false; // ゲームを終了
+                }
+            } else {
+                startGame(); // ゲームがまだ開始されていなければ開始
+            }
+        };
+
+        // 最初のゲームを開始
+        startGame();
+    </script>
+</body>
+</html>
