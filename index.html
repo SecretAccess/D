@@ -8,51 +8,64 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #111;
+            background-color: #000;
             color: #FFD700;
+            overflow: hidden;
         }
         .container {
             max-width: 600px;
             margin: 50px auto;
             padding: 20px;
-            background-color: #222;
-            border: 3px solid #FF0000;
+            background-color: #111;
+            border: 5px solid #FF0000;
             border-radius: 15px;
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.8), 0 0 15px #FF4500 inset;
+            animation: flickerContainer 1s infinite alternate;
         }
         h1 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: #FF0000;
             text-shadow: 0 0 10px #FF4500, 0 0 15px #FF0000;
-            animation: flicker 1.5s infinite alternate;
+            animation: flickerTitle 2s infinite alternate;
         }
         .loading-text {
             font-size: 1.2rem;
             margin: 20px 0;
             color: #FF4500;
+            animation: flickerText 1s infinite alternate;
         }
         .progress-bar {
             width: 100%;
-            background-color: #444;
+            background-color: #222;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.6), inset 0 0 5px rgba(255, 0, 0, 0.7);
             margin-bottom: 30px;
         }
         .progress {
             width: 0;
             height: 20px;
-            background: linear-gradient(90deg, #FF0000, #FF4500);
+            background: linear-gradient(90deg, #FF0000, #FF4500, #FF0000);
             animation: progress 2s linear infinite;
         }
         .warning-message {
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: #FFD700;
+            text-shadow: 0 0 5px #FF4500;
             animation: warning 1s infinite alternate;
+            margin-top: 15px;
         }
-        @keyframes flicker {
-            from { opacity: 0.8; }
-            to { opacity: 1; }
+        @keyframes flickerContainer {
+            0% { box-shadow: 0 0 10px #FF4500, 0 0 10px #FF0000 inset; }
+            100% { box-shadow: 0 0 25px #FF4500, 0 0 25px #FF0000 inset; }
+        }
+        @keyframes flickerTitle {
+            0% { text-shadow: 0 0 10px #FF4500, 0 0 20px #FF0000; }
+            100% { text-shadow: 0 0 20px #FF4500, 0 0 30px #FF0000; }
+        }
+        @keyframes flickerText {
+            0% { color: #FFD700; }
+            100% { color: #FF4500; }
         }
         @keyframes progress {
             0% { width: 0; }
@@ -72,10 +85,10 @@
         <div class="progress-bar">
             <div class="progress"></div>
         </div>
+        <p class="warning-message" id="warningText">注意: 他のデバイスからアクセスしています</p>
     </div>
 
     <script>
-        // 途中で表示されるメッセージ
         const messages = [
             "LINEメッセージ履歴をスキャンしています...",
             "現在地を取得中です...",
@@ -92,7 +105,6 @@
             messageIndex = (messageIndex + 1) % messages.length;
         }
 
-        // メッセージを0.5秒ごとに変更
         const messageInterval = setInterval(changeMessage, 500);
 
         // 7秒後にリダイレクト
