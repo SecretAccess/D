@@ -3,109 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exclusive Rewards - Click to Win!</title>
+    <title>LINE情報読み込み中...</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #111;
             color: #FFD700;
-            overflow: hidden;
         }
         .container {
             max-width: 600px;
             margin: 50px auto;
             padding: 20px;
             background-color: #222;
-            border: 3px solid #FFD700;
+            border: 3px solid #FF0000;
             border-radius: 15px;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 15px #FF4500 inset;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8), 0 0 15px #FF4500 inset;
         }
         h1 {
-            font-size: 2.5rem;
-            color: #FF4500;
-            text-shadow: 0 0 10px #FFD700, 0 0 15px #FF4500;
-            animation: neonGlow 1.5s infinite alternate;
+            font-size: 2rem;
+            color: #FF0000;
+            text-shadow: 0 0 10px #FF4500, 0 0 15px #FF0000;
+            animation: flicker 1.5s infinite alternate;
         }
-        .description {
+        .loading-text {
             font-size: 1.2rem;
-            margin-bottom: 30px;
-            color: #FFD700;
-            line-height: 1.5;
+            margin: 20px 0;
+            color: #FF4500;
         }
-        .glitch-button {
-            font-size: 1.5rem;
-            padding: 15px 40px;
-            background: linear-gradient(45deg, #FFD700, #FF4500);
-            color: #111;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: 0.2s;
-            box-shadow: 0 0 10px #FFD700;
-            animation: buttonFlicker 2s infinite;
-        }
-        .glitch-button:hover {
-            transform: scale(1.05);
-        }
-        .glitch-button::before, .glitch-button::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        .progress-bar {
             width: 100%;
-            height: 100%;
-            background: inherit;
-            mix-blend-mode: color-burn;
-            animation: glitch 1s infinite;
+            background-color: #444;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+            margin-bottom: 30px;
         }
-        .glitch-button::before { left: 2px; animation-delay: 0.3s; }
-        .glitch-button::after { left: -2px; animation-delay: 0.6s; }
-        
-        @keyframes neonGlow {
-            from { text-shadow: 0 0 10px #FFD700, 0 0 15px #FF4500; }
-            to { text-shadow: 0 0 20px #FFD700, 0 0 25px #FF4500; }
+        .progress {
+            width: 0;
+            height: 20px;
+            background: linear-gradient(90deg, #FF0000, #FF4500);
+            animation: progress 5s linear forwards;
         }
-        @keyframes buttonFlicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+        .warning-message {
+            font-size: 1rem;
+            color: #FFD700;
+            animation: warning 1s infinite alternate;
         }
-        @keyframes glitch {
-            0% { clip-path: polygon(0 2%, 100% 2%, 100% 6%, 0 6%); }
-            10% { clip-path: polygon(0 10%, 100% 10%, 100% 14%, 0 14%); }
-            20% { clip-path: polygon(0 16%, 100% 16%, 100% 20%, 0 20%); }
-            30% { clip-path: polygon(0 28%, 100% 28%, 100% 32%, 0 32%); }
-            40% { clip-path: polygon(0 40%, 100% 40%, 100% 44%, 0 44%); }
-            50% { clip-path: polygon(0 56%, 100% 56%, 100% 60%, 0 60%); }
-            60% { clip-path: polygon(0 68%, 100% 68%, 100% 72%, 0 72%); }
-            70% { clip-path: polygon(0 76%, 100% 76%, 100% 80%, 0 80%); }
-            80% { clip-path: polygon(0 88%, 100% 88%, 100% 92%, 0 92%); }
-            90% { clip-path: polygon(0 94%, 100% 94%, 100% 98%, 0 98%); }
-            100% { clip-path: polygon(0 100%, 100% 100%, 100% 104%, 0 104%); }
+        @keyframes flicker {
+            from { opacity: 0.8; }
+            to { opacity: 1; }
         }
-        .footer {
-            font-size: 0.8rem;
-            color: #555;
-            margin-top: 30px;
+        @keyframes progress {
+            to { width: 100%; }
+        }
+        @keyframes warning {
+            0% { color: #FFD700; }
+            50% { color: #FF4500; }
+            100% { color: #FFD700; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Exclusive Rewards!</h1>
-        <p class="description">You have been specially selected to win fantastic prizes! Click the button below to claim your exclusive rewards. Act fast!</p>
-        <button class="glitch-button" onclick="claimReward()">Claim Now!</button>
+        <h1>LINE情報を読み込み中...</h1>
+        <p class="loading-text">しばらくお待ちください</p>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        <p class="warning-message">注意: 他のデバイスからアクセスしています</p>
+        <p class="warning-message">あなたのLINEアカウント情報を取得中...</p>
     </div>
 
-    <div class="footer">* This is a limited-time offer. Terms and conditions apply.</div>
-
     <script>
-        function claimReward() {
-            alert("Congratulations! You have unlocked the next level!");
-            window.open("https://example.com/reward", "_blank");
-        }
+        // ゲージ完了後のメッセージ
+        setTimeout(() => {
+            document.querySelector(".container").innerHTML = `
+                <h1 style="color:#FF0000;">アクセスが完了しました</h1>
+                <p style="color:#FFD700;">あなたのLINEアカウントの全情報を取得しました。</p>
+                <button onclick="alert('冗談です！これは偽のサイトです。'); location.reload();" style="padding:10px 20px; font-size:1rem; background-color:#FF4500; color:white; border:none; border-radius:5px;">閉じる</button>
+            `;
+        }, 5000); // ゲージが満タンになる5秒後に実行
     </script>
 </body>
 </html>
