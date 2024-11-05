@@ -30,23 +30,15 @@
         .hidden {
             display: none;
         }
-        .mystery {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: move 5s infinite alternate;
-        }
-        @keyframes move {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(200px, 200px); }
+        #status {
+            margin-top: 20px;
+            font-size: 20px;
         }
     </style>
 </head>
 <body>
     <h1>不思議なサイトへようこそ！</h1>
-    <p>以下のアクションを完了してください。</p>
+    <p>以下のアクションを特定の順番で完了してください。</p>
 
     <div class="action-item" id="action1">アイテム1をクリック</div>
     <div class="action-item" id="action2">アイテム2をクリック</div>
@@ -58,21 +50,30 @@
     </div>
 
     <script>
-        let actionCount = 0;
+        let clickOrder = [];
+        const correctOrder = [2, 3, 1]; // 正しい順番
 
-        function completeAction() {
-            actionCount++;
-            document.getElementById('status').innerText = `${actionCount}つのアクションが完了しました。`;
+        function completeAction(actionNumber) {
+            clickOrder.push(actionNumber);
+            document.getElementById('status').innerText = `${clickOrder.join(', ')} の順でクリックしました。`;
 
-            if (actionCount >= 3) {
-                document.getElementById('finalLink').classList.remove('hidden');
-                document.getElementById('status').innerText = 'すべてのアクションが完了しました！';
+            // 順番が間違っているかチェック
+            if (clickOrder.length === correctOrder.length) {
+                if (JSON.stringify(clickOrder) === JSON.stringify(correctOrder)) {
+                    // 正しい順番の場合
+                    document.getElementById('finalLink').classList.remove('hidden');
+                    document.getElementById('status').innerText = 'すべてのアクションが完了しました！';
+                } else {
+                    // 間違った順番の場合
+                    document.getElementById('status').innerText = 'エラー: 正しい順番でクリックしてください！';
+                    clickOrder = []; // 順番をリセット
+                }
             }
         }
 
-        document.getElementById('action1').onclick = completeAction;
-        document.getElementById('action2').onclick = completeAction;
-        document.getElementById('action3').onclick = completeAction;
+        document.getElementById('action1').onclick = function() { completeAction(1); };
+        document.getElementById('action2').onclick = function() { completeAction(2); };
+        document.getElementById('action3').onclick = function() { completeAction(3); };
     </script>
 </body>
 </html>
