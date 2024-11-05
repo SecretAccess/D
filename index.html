@@ -3,128 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>逃げるゲーム</title>
+    <title>Exclusive Rewards - Click to Win!</title>
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        #gameArea {
-            position: relative;
-            width: 90vw;
-            height: 80vh;
-            background-color: #fff;
-            border: 3px solid #333;
-            border-radius: 10px;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #111;
+            color: #FFD700;
             overflow: hidden;
         }
-        .player, .enemy, .goal {
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #222;
+            border: 3px solid #FFD700;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 15px #FF4500 inset;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #FF4500;
+            text-shadow: 0 0 10px #FFD700, 0 0 15px #FF4500;
+            animation: neonGlow 1.5s infinite alternate;
+        }
+        .description {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #FFD700;
+            line-height: 1.5;
+        }
+        .glitch-button {
+            font-size: 1.5rem;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #FFD700, #FF4500);
+            color: #111;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: 0.2s;
+            box-shadow: 0 0 10px #FFD700;
+            animation: buttonFlicker 2s infinite;
+        }
+        .glitch-button:hover {
+            transform: scale(1.05);
+        }
+        .glitch-button::before, .glitch-button::after {
+            content: '';
             position: absolute;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            mix-blend-mode: color-burn;
+            animation: glitch 1s infinite;
         }
-        .player {
-            background-color: #4CAF50;
+        .glitch-button::before { left: 2px; animation-delay: 0.3s; }
+        .glitch-button::after { left: -2px; animation-delay: 0.6s; }
+        
+        @keyframes neonGlow {
+            from { text-shadow: 0 0 10px #FFD700, 0 0 15px #FF4500; }
+            to { text-shadow: 0 0 20px #FFD700, 0 0 25px #FF4500; }
         }
-        .enemy {
-            background-color: #F44336;
+        @keyframes buttonFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
-        .goal {
-            background-color: #FFD700;
+        @keyframes glitch {
+            0% { clip-path: polygon(0 2%, 100% 2%, 100% 6%, 0 6%); }
+            10% { clip-path: polygon(0 10%, 100% 10%, 100% 14%, 0 14%); }
+            20% { clip-path: polygon(0 16%, 100% 16%, 100% 20%, 0 20%); }
+            30% { clip-path: polygon(0 28%, 100% 28%, 100% 32%, 0 32%); }
+            40% { clip-path: polygon(0 40%, 100% 40%, 100% 44%, 0 44%); }
+            50% { clip-path: polygon(0 56%, 100% 56%, 100% 60%, 0 60%); }
+            60% { clip-path: polygon(0 68%, 100% 68%, 100% 72%, 0 72%); }
+            70% { clip-path: polygon(0 76%, 100% 76%, 100% 80%, 0 80%); }
+            80% { clip-path: polygon(0 88%, 100% 88%, 100% 92%, 0 92%); }
+            90% { clip-path: polygon(0 94%, 100% 94%, 100% 98%, 0 98%); }
+            100% { clip-path: polygon(0 100%, 100% 100%, 100% 104%, 0 104%); }
+        }
+        .footer {
+            font-size: 0.8rem;
+            color: #555;
+            margin-top: 30px;
         }
     </style>
 </head>
 <body>
-    <div id="gameArea">
-        <div class="player" id="player" style="top: 20px; left: 20px;"></div>
-        <div class="enemy" id="enemy" style="top: 300px; left: 300px;"></div>
-        <div class="goal" id="goal" style="top: 400px; left: 700px;"></div>
+    <div class="container">
+        <h1>Exclusive Rewards!</h1>
+        <p class="description">You have been specially selected to win fantastic prizes! Click the button below to claim your exclusive rewards. Act fast!</p>
+        <button class="glitch-button" onclick="claimReward()">Claim Now!</button>
     </div>
 
+    <div class="footer">* This is a limited-time offer. Terms and conditions apply.</div>
+
     <script>
-        const player = document.getElementById("player");
-        const enemy = document.getElementById("enemy");
-        const goal = document.getElementById("goal");
-        const gameArea = document.getElementById("gameArea");
-        let playerSpeed = 20;
-        let enemySpeed = 2;
-        let gameActive = true;
-
-        // プレイヤーを動かす
-        document.addEventListener("keydown", (e) => {
-            if (!gameActive) return;
-            let rect = player.getBoundingClientRect();
-            let gameAreaRect = gameArea.getBoundingClientRect();
-
-            switch (e.key) {
-                case "ArrowUp":
-                    if (rect.top > gameAreaRect.top) player.style.top = rect.top - gameAreaRect.top - playerSpeed + "px";
-                    break;
-                case "ArrowDown":
-                    if (rect.bottom < gameAreaRect.bottom) player.style.top = rect.top - gameAreaRect.top + playerSpeed + "px";
-                    break;
-                case "ArrowLeft":
-                    if (rect.left > gameAreaRect.left) player.style.left = rect.left - gameAreaRect.left - playerSpeed + "px";
-                    break;
-                case "ArrowRight":
-                    if (rect.right < gameAreaRect.right) player.style.left = rect.left - gameAreaRect.left + playerSpeed + "px";
-                    break;
-            }
-
-            checkCollision();
-        });
-
-        // 敵の移動
-        function moveEnemy() {
-            let playerRect = player.getBoundingClientRect();
-            let enemyRect = enemy.getBoundingClientRect();
-
-            let dx = playerRect.left - enemyRect.left;
-            let dy = playerRect.top - enemyRect.top;
-            let distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance > 1) {
-                enemy.style.left = enemyRect.left + (dx / distance) * enemySpeed + "px";
-                enemy.style.top = enemyRect.top + (dy / distance) * enemySpeed + "px";
-            }
-
-            checkCollision();
-            if (gameActive) requestAnimationFrame(moveEnemy);
+        function claimReward() {
+            alert("Congratulations! You have unlocked the next level!");
+            window.open("https://example.com/reward", "_blank");
         }
-
-        // ゴールと敵との当たり判定
-        function checkCollision() {
-            let playerRect = player.getBoundingClientRect();
-            let goalRect = goal.getBoundingClientRect();
-            let enemyRect = enemy.getBoundingClientRect();
-
-            if (
-                playerRect.left < goalRect.right &&
-                playerRect.right > goalRect.left &&
-                playerRect.top < goalRect.bottom &&
-                playerRect.bottom > goalRect.top
-            ) {
-                alert("おめでとうございます！ゴールしました！");
-                gameActive = false;
-            }
-
-            if (
-                playerRect.left < enemyRect.right &&
-                playerRect.right > enemyRect.left &&
-                playerRect.top < enemyRect.bottom &&
-                playerRect.bottom > enemyRect.top
-            ) {
-                alert("敵に捕まりました！ゲームオーバーです！");
-                gameActive = false;
-            }
-        }
-
-        moveEnemy();
     </script>
 </body>
 </html>
