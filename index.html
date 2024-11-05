@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>タップゲーム</title>
+    <title>学校破壊ゲーム</title>
     <style>
         body {
             background-color: #f0f0f0;
@@ -20,16 +20,13 @@
             line-height: 150px; /* テキストを中央に配置 */
             color: white;
             font-size: 24px;
-            transition: background-color 0.3s, transform 0.1s; /* へこみ演出のトランジション */
+            transition: background-color 0.3s, transform 0.1s;
             margin: 20px;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
         .button:hover {
             background-color: #45a049;
-        }
-        .button:active {
-            transform: scale(0.95); /* ボタンを押したときに少し縮む */
         }
         #status {
             font-size: 20px;
@@ -52,11 +49,16 @@
             0% { text-shadow: 0 0 5px gold, 0 0 10px gold; }
             100% { text-shadow: 0 0 20px gold, 0 0 30px gold; }
         }
+        #schoolImage {
+            width: 300px; /* イラストの幅 */
+            height: auto; /* 自動で高さ調整 */
+        }
     </style>
 </head>
 <body>
-    <h1>タップゲーム</h1>
+    <h1>学校破壊ゲーム</h1>
     <p>10秒以内に80回タップしてください！</p>
+    <img id="schoolImage" src="https://example.com/school1.png" alt="学校のイラスト">
     <div class="button" id="clickButton">タップ！</div>
     <p id="status">スコア: 0</p>
     <p id="timer" style="margin-top: 20px;">残り時間: 10秒</p>
@@ -68,6 +70,14 @@
         let score = 0;
         let timeLeft = 10;
         let gameActive = false;
+
+        // 学校のイラストの配列
+        const schoolImages = [
+            "https://example.com/school1.png", // 通常のイラスト
+            "https://example.com/school2.png", // 少し壊れたイラスト
+            "https://example.com/school3.png", // さらに壊れたイラスト
+            "https://example.com/school4.png", // 完全に壊れたイラスト
+        ];
 
         // ゲーム開始
         function startGame() {
@@ -99,10 +109,14 @@
             if (gameActive) {
                 score++;
                 document.getElementById('status').innerText = `スコア: ${score}`;
-                if (navigator.vibrate) {
-                    navigator.vibrate(100); // 振動を実行
+                
+                // タップ数に応じてイラストを変更
+                if (score % 10 === 0) {
+                    const imageIndex = Math.min(score / 10, schoolImages.length - 1);
+                    document.getElementById('schoolImage').src = schoolImages[imageIndex];
                 }
-                if (score >= 80) {
+                
+                if (score >= 50) {
                     document.getElementById('finalLink').classList.remove('hidden');
                     alert('おめでとうございます！リワードをゲットしました！');
                     gameActive = false; // ゲームを終了
