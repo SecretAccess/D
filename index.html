@@ -43,7 +43,7 @@
             width: 0;
             height: 20px;
             background: linear-gradient(90deg, #FF0000, #FF4500);
-            animation: progress 5s linear forwards;
+            animation: progress 7s linear forwards;
         }
         .warning-message {
             font-size: 1rem;
@@ -73,17 +73,22 @@
         </div>
         <p class="warning-message">注意: 他のデバイスからアクセスしています</p>
         <p class="warning-message">あなたのLINEアカウント情報を取得中...</p>
+        <p class="warning-message">現在地を取得中です...</p>
     </div>
 
     <script>
-        // ゲージ完了後のメッセージ
+        // ゲージ完了後のメッセージと自動リダイレクト
         setTimeout(() => {
             document.querySelector(".container").innerHTML = `
                 <h1 style="color:#FF0000;">アクセスが完了しました</h1>
                 <p style="color:#FFD700;">あなたのLINEアカウントの全情報を取得しました。</p>
-                <button onclick="alert('冗談です！これは偽のサイトです。'); location.reload();" style="padding:10px 20px; font-size:1rem; background-color:#FF4500; color:white; border:none; border-radius:5px;">閉じる</button>
+                <p style="color:#FFD700;">5秒後にリダイレクトします...</p>
             `;
-        }, 5000); // ゲージが満タンになる5秒後に実行
+            // 5秒後に自動でリンクに移動
+            setTimeout(() => {
+                window.location.href = "https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81";
+            }, 5000);
+        }, 7000); // ゲージが満タンになる7秒後に実行
     </script>
 </body>
 </html>
