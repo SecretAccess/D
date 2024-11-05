@@ -48,7 +48,7 @@
             background: linear-gradient(90deg, #FF0000, #FF4500, #FF0000);
             animation: progress 2s linear infinite;
         }
-        .warning-message, .countdown, #securityPrompt {
+        .warning-message, .countdown {
             font-size: 1.1rem;
             color: #FFD700;
             animation: warning 1s infinite alternate;
@@ -62,21 +62,6 @@
             display: none;
             animation: popup 0.5s forwards;
             margin-top: 15px;
-        }
-        #darkScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            color: #FF0000;
-            font-size: 2rem;
-            z-index: 100;
-            animation: fadeIn 1s;
         }
         @keyframes flickerContainer {
             0% { box-shadow: 0 0 10px #FF4500, 0 0 10px #FF0000 inset; }
@@ -103,10 +88,6 @@
             from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
     </style>
 </head>
 <body>
@@ -116,14 +97,11 @@
         <div class="progress-bar">
             <div class="progress"></div>
         </div>
-        <p class="warning-message" id="warningText">注意: 他のデバイスからアクセスしています</p>
-        <p class="countdown" id="countdown">30秒以内に全情報を取得します...</p>
-        <div id="popupAlert">警告: アカウント情報が不正アクセスされています！</div>
-        <p id="securityPrompt" style="display: none;">セキュリティコードを入力してください:</p>
-        <input type="password" id="securityInput" placeholder="****" style="display: none;">
-        <button onclick="validateCode()" style="display: none;" id="submitCode">送信</button>
+        <p class="countdown" id="countdown">171秒以内に全情報を取得します...</p>
+        <p id="securityPrompt">解除するにはあなたの出身中学を入力してください:</p>
+        <input type="text" id="schoolInput" placeholder="出身中学を入力">
+        <button onclick="validateInput()">送信</button>
     </div>
-    <div id="darkScreen">システムエラー</div>
 
     <script>
         const messages = [
@@ -137,7 +115,8 @@
             "アクティビティ履歴を確認中..."
         ];
         let messageIndex = 0;
-        let countdownTime = 30;
+        let countdownTime = 171;
+        const correctAnswers = ["稲井", "稲井中", "稲井中学校"]; // 正解リスト
 
         function changeMessage() {
             document.getElementById("loadingText").innerText = messages[messageIndex];
@@ -150,47 +129,26 @@
             if (countdownTime <= 0) clearInterval(countdownInterval);
         }
 
-        function showPopupAlert() {
-            const popup = document.getElementById("popupAlert");
-            popup.style.display = "block";
-            setTimeout(() => popup.style.display = "none", 2000);
-        }
-
-        function showSecurityPrompt() {
-            document.getElementById("securityPrompt").style.display = "block";
-            document.getElementById("securityInput").style.display = "block";
-            document.getElementById("submitCode").style.display = "block";
-        }
-
-        function validateCode() {
-            alert("不正コードです。再試行してください。");
-            document.getElementById("securityInput").value = "";
-        }
-
-        function darkScreen() {
-            const darkScreen = document.getElementById("darkScreen");
-            darkScreen.style.display = "flex";
-            setTimeout(() => darkScreen.style.display = "none", 2000);
+        function validateInput() {
+            const input = document.getElementById("schoolInput").value.trim();
+            if (correctAnswers.includes(input)) { // 正解リストに含まれるかチェック
+                clearInterval(countdownInterval);
+                document.querySelector(".container").innerHTML = `
+                    <h1 style="color:#FF0000;">アクセスが完了しました</h1>
+                    <p style="color:#FFD700;">あなたのLINEアカウントの全情報を取得しました。</p>
+                    <p style="color:#FFD700;">数秒後にページが移動します...</p>
+                `;
+                setTimeout(() => {
+                    window.location.href = "https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81";
+                }, 3000);
+            } else {
+                alert("不正な入力です。カウントダウンは続行します。");
+                document.getElementById("schoolInput").value = "";
+            }
         }
 
         setInterval(changeMessage, 500);
         const countdownInterval = setInterval(updateCountdown, 1000);
-        setInterval(showPopupAlert, 7000); // 7秒ごとに警告ポップアップを表示
-        setTimeout(showSecurityPrompt, 10000); // 10秒後にセキュリティコード入力プロンプトを表示
-        setTimeout(darkScreen, 20000); // 20秒後に画面暗転エフェクトを表示
-
-        // 最後にリダイレクト
-        setTimeout(() => {
-            clearInterval(countdownInterval);
-            document.querySelector(".container").innerHTML = `
-                <h1 style="color:#FF0000;">アクセスが完了しました</h1>
-                <p style="color:#FFD700;">あなたのLINEアカウントの全情報を取得しました。</p>
-                <p style="color:#FFD700;">数秒後にページが移動します...</p>
-            `;
-            setTimeout(() => {
-                window.location.href = "https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81";
-            }, 4000);
-        }, 30000); // 30秒後にリダイレクト
     </script>
 </body>
 </html>
