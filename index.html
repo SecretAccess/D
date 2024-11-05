@@ -29,10 +29,23 @@
         .reward-link {
             font-size: 20px;
             margin-top: 30px;
-            display: none;
-            color: blue;
-            text-decoration: underline;
+            padding: 15px 30px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
             cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+            display: none; /* 最初は非表示 */
+        }
+        .reward-link:hover {
+            background-color: #45A049;
+            transform: scale(1.05);
+        }
+        .reward-link:active {
+            background-color: #388E3C;
+            transform: scale(0.98);
         }
     </style>
 </head>
@@ -40,21 +53,21 @@
     <h1>タイピングゲーム</h1>
     <p>表示された単語をタイピングしてください！</p>
     
-    <div class="word" id="wordDisplay">開始を押してください</div>
+    <div class="word" id="wordDisplay">ゲームスタートを押してください</div>
     <input type="text" class="input-box" id="userInput" placeholder="ここに入力..." disabled>
     <p class="status">スコア: <span id="score">0</span></p>
     <p class="status">残り時間: <span id="timer">30</span> 秒</p>
     <button onclick="startGame()">ゲームスタート</button>
 
-    <div id="finalLink" class="reward-link" onclick="openLink()">リワードをゲットする</div>
+    <div id="finalLink" class="reward-link" onclick="openLink()">次に進む</div>
 
     <script>
-        const words = ["稲井", "同窓会", "30歳", "GTO", "数学教師", "なんぼ", "真野川", "陸前稲井駅", "丸森山", "牛石橋", "南境", "沼津貝塚"];
+        const words = ["稲井", "同窓会", "30歳", "GTO", "数学教師", "なんぼ", "真野川", "陸前稲井駅", "丸森山", "ヘルメット", "南境", "沼津貝塚"];
         let currentWord = "";
         let score = 0;
         let timeLeft = 30;
         let gameActive = false;
-        const requiredScore = 6; // クリアに必要なスコア
+        const requiredScore = 5; // クリアに必要なスコア
 
         function startGame() {
             score = 0;
@@ -77,8 +90,8 @@
                     document.getElementById("userInput").disabled = true;
 
                     if (score >= requiredScore) {
-                        document.getElementById("finalLink").style.display = "block";
-                        alert("おめでとうございます！リワードをゲットしました！");
+                        document.getElementById("finalLink").style.display = "inline-block";
+                        alert("おめでとうございます！このゲームをクリアしました！");
                     } else {
                         alert("時間切れです！もう一度挑戦してください。");
                     }
