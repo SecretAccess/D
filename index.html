@@ -3,71 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>クリックゲーム</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f0f0f0;
-            color: #333;
-        }
-        .container {
-            margin-top: 50px;
-        }
-        .score {
-            font-size: 2em;
-            margin: 20px;
-        }
-        .click-button {
-            padding: 15px 30px;
-            font-size: 1.5em;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .click-button:hover {
-            background-color: #0056b3;
-        }
-        .message {
-            margin-top: 20px;
-            font-size: 1.2em;
-            color: #666;
-        }
-    </style>
+    <title>リアルタイムスコアボード</title>
 </head>
 <body>
-    <div class="container">
-        <h1>クリックゲーム</h1>
-        <p class="score">スコア: <span id="score">0</span></p>
-        <button class="click-button" onclick="increaseScore()">クリックしてスコアを増やそう！</button>
-        <p class="message" id="message"></p>
-    </div>
+    <h1>リアルタイムスコアボード</h1>
+
+    <!-- Firebase SDK（CDN経由） -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js"></script>
 
     <script>
-        let score = 0;
+        // Firebaseの構成情報
+        const firebaseConfig = {
+            apiKey: "AIzaSyC28YhwtYVbCmYW_x0n3tWz9MxHGvNpnDc",
+            authDomain: "game-project-fe7a5.firebaseapp.com",
+            databaseURL: "https://game-project-fe7a5-default-rtdb.firebaseio.com",
+            projectId: "game-project-fe7a5",
+            storageBucket: "game-project-fe7a5.firebasestorage.app",
+            messagingSenderId: "145517601814",
+            appId: "1:145517601814:web:2ab152cbd57ab8d0824137",
+            measurementId: "G-3CWPFYK05D"
+        };
 
-        function increaseScore() {
-            score++;
-            document.getElementById("score").innerText = score;
-            updateMessage();
-        }
+        // Firebaseを初期化
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-        function updateMessage() {
-            const messageElement = document.getElementById("message");
-
-            if (score < 10) {
-                messageElement.innerText = "まだまだこれからだ！";
-            } else if (score < 20) {
-                messageElement.innerText = "いい感じ！その調子！";
-            } else if (score < 30) {
-                messageElement.innerText = "すごい！もうすぐハイスコア！";
-            } else {
-                messageElement.innerText = "おめでとう！最高スコアを達成しました！";
-            }
-        }
+        // データベースに接続確認（例としてデータ書き込み）
+        database.ref('test').set({ example: 'Hello, Firebase!' });
     </script>
 </body>
 </html>
