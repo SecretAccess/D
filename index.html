@@ -3,120 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>タイピングゲーム</title>
+    <title>数学教師おちむの全員東大合格への道</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
             background-color: #f0f0f0;
-        }
-        .word {
-            font-size: 24px;
-            margin-top: 20px;
-            font-weight: bold;
             color: #333;
+            text-align: center;
         }
-        .input-box {
-            font-size: 18px;
-            padding: 10px;
-            width: 200px;
-            margin-top: 20px;
+        .story-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .status {
+        .text-box {
             font-size: 18px;
             margin-top: 20px;
+            min-height: 100px;
+        }
+        .choice-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .choice-button:hover {
+            background-color: #45A049;
         }
         .reward-link {
             font-size: 20px;
             margin-top: 30px;
-            padding: 15px 30px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            display: none;
+            color: blue;
+            text-decoration: underline;
             cursor: pointer;
-            transition: transform 0.2s, background-color 0.3s;
-            display: none; /* 最初は非表示 */
-        }
-        .reward-link:hover {
-            background-color: #45A049;
-            transform: scale(1.05);
-        }
-        .reward-link:active {
-            background-color: #388E3C;
-            transform: scale(0.98);
         }
     </style>
 </head>
 <body>
-    <h1>タイピングゲーム</h1>
-    <p>表示された単語をタイピングしてください！</p>
-    
-    <div class="word" id="wordDisplay">ゲームスタートを押してください</div>
-    <input type="text" class="input-box" id="userInput" placeholder="ここに入力..." disabled>
-    <p class="status">スコア: <span id="score">0</span></p>
-    <p class="status">残り時間: <span id="timer">30</span> 秒</p>
-    <button onclick="startGame()">ゲームスタート</button>
-
-    <div id="finalLink" class="reward-link" onclick="openLink()">次に進む</div>
+    <div class="story-container">
+        <h1>数学教師おちむの全員東大合格への道</h1>
+        <div id="textBox" class="text-box">ここにストーリーが表示されます</div>
+        <div id="choicesContainer">
+            <!-- 選択肢ボタンが表示されます -->
+        </div>
+        <div id="finalLink" class="reward-link" onclick="openLink()">リンクを見る</div>
+    </div>
 
     <script>
-        const words = ["稲井", "同窓会", "30歳", "GTO", "数学教師", "なんぼ", "真野川", "陸前稲井駅", "丸森山", "ヘルメット", "南境", "沼津貝塚"];
-        let currentWord = "";
-        let score = 0;
-        let timeLeft = 30;
-        let gameActive = false;
-        const requiredScore = 5; // クリアに必要なスコア
-
-        function startGame() {
-            score = 0;
-            timeLeft = 30;
-            gameActive = true;
-            document.getElementById("score").innerText = score;
-            document.getElementById("timer").innerText = timeLeft;
-            document.getElementById("userInput").disabled = false;
-            document.getElementById("userInput").value = "";
-            document.getElementById("finalLink").style.display = "none"; // リワードリンクを非表示
-            generateWord();
-
-            const timerInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById("timer").innerText = timeLeft;
-
-                if (timeLeft <= 0 || score >= requiredScore) {
-                    clearInterval(timerInterval);
-                    gameActive = false;
-                    document.getElementById("userInput").disabled = true;
-
-                    if (score >= requiredScore) {
-                        document.getElementById("finalLink").style.display = "inline-block";
-                        alert("おめでとうございます！このゲームをクリアしました！");
-                    } else {
-                        alert("時間切れです！もう一度挑戦してください。");
-                    }
-                }
-            }, 1000);
-        }
-
-        function generateWord() {
-            currentWord = words[Math.floor(Math.random() * words.length)];
-            document.getElementById("wordDisplay").innerText = currentWord;
-            document.getElementById("userInput").value = "";
-            document.getElementById("userInput").focus();
-        }
-
-        document.getElementById("userInput").addEventListener("input", function() {
-            if (gameActive && this.value === currentWord) {
-                score++;
-                document.getElementById("score").innerText = score;
-                generateWord();
+        const scenes = {
+            start: {
+                text: "数学教師のおちむ先生は、今年のクラス全員を東大に合格させるという大きな目標を持っています！まず、最初の授業でどのように生徒たちを引きつけるか考えます。",
+                choices: [
+                    { text: "導入に面白い数学クイズを出す", nextScene: "quiz" },
+                    { text: "東大合格の秘訣を語る", nextScene: "motivate" }
+                ]
+            },
+            quiz: {
+                text: "おちむ先生が数学クイズを出すと、生徒たちは興味津々！「先生、もっと教えてください！」という声があがりました。",
+                choices: [
+                    { text: "難しい問題にも挑戦させる", nextScene: "challenge" },
+                    { text: "基礎からゆっくり教える", nextScene: "basics" }
+                ]
+            },
+            motivate: {
+                text: "おちむ先生の「全員東大合格」宣言に、生徒たちは驚きますが、少しずつやる気が出てきました。「先生、私たち本当にやれるんですか？」",
+                choices: [
+                    { text: "やる気に満ちた授業計画を立てる", nextScene: "plan" },
+                    { text: "個別に面談を行う", nextScene: "individualTalk" }
+                ]
+            },
+            challenge: {
+                text: "難しい問題に挑戦する生徒たちは苦戦していましたが、「東大に行くにはこのくらいの難易度は必要だ！」と気合を入れます。",
+                choices: [
+                    { text: "生徒一人一人にフォローアップ", nextScene: "followUp" },
+                    { text: "チームで問題に取り組むようにする", nextScene: "teamWork" }
+                ]
+            },
+            basics: {
+                text: "基礎からゆっくりと教え始めたおちむ先生のおかげで、生徒たちは次第に自信をつけ始めました。",
+                choices: [
+                    { text: "さらに高い目標を設定する", nextScene: "raiseGoals" },
+                    { text: "試験問題に取り組ませる", nextScene: "examPractice" }
+                ]
+            },
+            plan: {
+                text: "やる気に満ちた授業計画を立てたおちむ先生に、クラス全体がついてきています。「先生、私たちやれる気がしてきました！」",
+                choices: [
+                    { text: "グループプロジェクトを設定", nextScene: "project" },
+                    { text: "東大過去問に挑戦させる", nextScene: "pastExam" }
+                ]
+            },
+            individualTalk: {
+                text: "生徒一人一人と面談を行い、それぞれの目標や不安を聞き出したおちむ先生。個別サポートがやる気につながりました。",
+                choices: [
+                    { text: "生徒をサポートする特別プログラムを導入", nextScene: "specialProgram" },
+                    { text: "試験対策に集中する", nextScene: "examFocus" }
+                ]
+            },
+            followUp: {
+                text: "生徒たちの疑問や課題を一つ一つフォローアップしていくことで、確実に力をつけていきました。",
+                choices: [
+                    { text: "週末特訓を行う", nextScene: "weekendTraining" },
+                    { text: "個別指導をさらに強化", nextScene: "intensiveSupport" }
+                ]
+            },
+            teamWork: {
+                text: "チームで問題に取り組むことで、クラス全体が団結し、互いに教え合うことで理解を深めていきます。",
+                choices: [
+                    { text: "全員が試験に合格し、東大を目指す", nextScene: "happyEnd" }
+                ]
+            },
+            happyEnd: {
+                text: "おめでとうございます！おちむ先生のクラスは見事に全員東大合格を達成しました！あなたの努力が報われました！",
+                choices: []
             }
-        });
+        };
+
+        let currentScene = "start";
+
+        function displayScene(scene) {
+            const sceneData = scenes[scene];
+            document.getElementById("textBox").innerText = sceneData.text;
+
+            const choicesContainer = document.getElementById("choicesContainer");
+            choicesContainer.innerHTML = "";
+            sceneData.choices.forEach(choice => {
+                const button = document.createElement("button");
+                button.className = "choice-button";
+                button.innerText = choice.text;
+                button.onclick = () => {
+                    displayScene(choice.nextScene);
+                    if (choice.nextScene === "happyEnd") {
+                        document.getElementById("finalLink").style.display = "block";
+                    }
+                };
+                choicesContainer.appendChild(button);
+            });
+        }
 
         function openLink() {
             window.open("https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81", "_blank");
         }
+
+        displayScene(currentScene);
     </script>
 </body>
 </html>
