@@ -54,14 +54,32 @@
             animation: warning 1s infinite alternate;
             margin-top: 15px;
         }
-        #popupAlert {
-            background-color: #FF0000;
-            color: #FFFFFF;
-            padding: 10px;
-            border-radius: 5px;
+        #securityPrompt, #schoolInput, #submitCode {
             display: none;
-            animation: popup 0.5s forwards;
+            font-size: 1.1rem;
+            color: #FFD700;
             margin-top: 15px;
+        }
+        #schoolInput {
+            padding: 10px;
+            border: 2px solid #FF4500;
+            border-radius: 5px;
+            width: 60%;
+            background-color: #333;
+            color: #FFD700;
+        }
+        #submitCode {
+            padding: 10px 20px;
+            background-color: #FF4500;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 10px #FF4500;
+            margin-top: 10px;
+        }
+        #submitCode:hover {
+            background-color: #FF0000;
         }
         @keyframes flickerContainer {
             0% { box-shadow: 0 0 10px #FF4500, 0 0 10px #FF0000 inset; }
@@ -84,10 +102,6 @@
             50% { color: #FF4500; }
             100% { color: #FFD700; }
         }
-        @keyframes popup {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
     </style>
 </head>
 <body>
@@ -100,7 +114,7 @@
         <p class="countdown" id="countdown">171秒以内に全情報を取得します...</p>
         <p id="securityPrompt">解除するにはあなたの出身中学を入力してください:</p>
         <input type="text" id="schoolInput" placeholder="出身中学を入力">
-        <button onclick="validateInput()">送信</button>
+        <button onclick="validateInput()" id="submitCode">送信</button>
     </div>
 
     <script>
@@ -116,7 +130,7 @@
         ];
         let messageIndex = 0;
         let countdownTime = 171;
-        const correctAnswers = ["稲井", "稲井中", "稲井中学校"]; // 正解リスト
+        const correctAnswers = ["稲井", "稲井中", "稲井中学校"];
 
         function changeMessage() {
             document.getElementById("loadingText").innerText = messages[messageIndex];
@@ -131,7 +145,7 @@
 
         function validateInput() {
             const input = document.getElementById("schoolInput").value.trim();
-            if (correctAnswers.includes(input)) { // 正解リストに含まれるかチェック
+            if (correctAnswers.includes(input)) {
                 clearInterval(countdownInterval);
                 document.querySelector(".container").innerHTML = `
                     <h1 style="color:#FF0000;">アクセスが完了しました</h1>
@@ -147,6 +161,13 @@
             }
         }
 
+        function showInputField() {
+            document.getElementById("securityPrompt").style.display = "block";
+            document.getElementById("schoolInput").style.display = "block";
+            document.getElementById("submitCode").style.display = "inline-block";
+        }
+
+        setTimeout(showInputField, 10000); // 10秒後に解除コード入力フィールドを表示
         setInterval(changeMessage, 500);
         const countdownInterval = setInterval(updateCountdown, 1000);
     </script>
