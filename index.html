@@ -3,161 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>タップゲーム</title>
+    <title>タイピングゲーム</title>
     <style>
         body {
-            background-color: #f0f0f0;
-            color: #333;
-            text-align: center;
             font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
         }
-        .button {
-            display: inline-block;
-            width: 150px;
-            height: 150px;
-            background-color: #4caf50;
-            border-radius: 75px;
-            line-height: 150px;
-            color: white;
+        .word {
             font-size: 24px;
-            transition: background-color 0.3s, transform 0.1s;
-            margin: 20px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-        .button:hover {
-            background-color: #45a049;
-        }
-        #status {
-            font-size: 20px;
             margin-top: 20px;
-        }
-        #timer {
-            font-size: 24px;
-        }
-        .hidden {
-            display: none;
-        }
-        .divine {
-            color: gold;
-            font-size: 28px;
             font-weight: bold;
-            margin-top: 30px;
-            animation: glow 1.5s infinite alternate;
+            color: #333;
         }
-        @keyframes glow {
-            0% { text-shadow: 0 0 5px gold, 0 0 10px gold; }
-            100% { text-shadow: 0 0 20px gold, 0 0 30px gold; }
-        }
-        .reward-button {
-            display: none; /* 最初は非表示 */
+        .input-box {
+            font-size: 18px;
+            padding: 10px;
+            width: 200px;
             margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #ff4500;
-            color: white;
-            font-size: 20px;
-            border-radius: 5px;
-            cursor: pointer;
         }
-        .reward-button:hover {
-            background-color: #e63946;
+        .status {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .reward-link {
+            font-size: 20px;
+            margin-top: 30px;
+            display: none;
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>学校破壊ゲーム</h1>
-    <p>10秒以内に50回タップしてください！</p>
-    <div class="button" id="clickButton">タップ！</div>
-    <p id="status">スコア: 0</p>
-    <p id="timer" style="margin-top: 20px;">残り時間: 10秒</p>
-    <p id="highScore" style="font-size: 18px;">最高記録: 0</p>
+    <h1>タイピングゲーム</h1>
+    <p>表示された単語をタイピングしてください！</p>
+    
+    <div class="word" id="wordDisplay">開始を押してください</div>
+    <input type="text" class="input-box" id="userInput" placeholder="ここに入力..." disabled>
+    <p class="status">スコア: <span id="score">0</span></p>
+    <p class="status">残り時間: <span id="timer">30</span> 秒</p>
+    <button onclick="startGame()">ゲームスタート</button>
 
-    <div id="finalLink" class="hidden">
-        <button class="reward-button" id="rewardButton">リワードをゲットする</button>
-    </div>
+    <div id="finalLink" class="reward-link" onclick="openLink()">リワードをゲットする</div>
 
     <script>
+        const words = ["稲井", "同窓会", "30歳", "GTO", "数学教師", "なんぼ", "真野川", "陸前稲井駅", "丸森山", "牛石橋", "南境", "沼津貝塚"];
+        let currentWord = "";
         let score = 0;
-        let timeLeft = 10;
+        let timeLeft = 30;
         let gameActive = false;
-        let highScore = 0; // 最高記録を保持
-        let timer; // タイマーを保持する変数
+        const requiredScore = 6; // クリアに必要なスコア
 
         function startGame() {
             score = 0;
-            timeLeft = 10;
+            timeLeft = 30;
             gameActive = true;
-            document.getElementById('status').innerText = `スコア: ${score}`;
-            document.getElementById('timer').innerText = `残り時間: ${timeLeft}秒`;
-            document.getElementById('highScore').innerText = `最高記録: ${highScore}`; // 最高記録を表示
-            document.getElementById('finalLink').classList.add('hidden'); // リンクを隠す
-            document.getElementById('rewardButton').style.display = 'none'; // ボタンを非表示
+            document.getElementById("score").innerText = score;
+            document.getElementById("timer").innerText = timeLeft;
+            document.getElementById("userInput").disabled = false;
+            document.getElementById("userInput").value = "";
+            document.getElementById("finalLink").style.display = "none"; // リワードリンクを非表示
+            generateWord();
 
-            // ゲームが開始されると同時にタイマーをスタート
-            timer = setInterval(() => {
+            const timerInterval = setInterval(() => {
                 timeLeft--;
-                document.getElementById('timer').innerText = `残り時間: ${timeLeft}秒`;
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
+                document.getElementById("timer").innerText = timeLeft;
+
+                if (timeLeft <= 0 || score >= requiredScore) {
+                    clearInterval(timerInterval);
                     gameActive = false;
-                    // 最高記録を更新
-                    if (score > highScore) {
-                        highScore = score;
-                        document.getElementById('highScore').innerText = `最高記録: ${highScore}`;
-                    }
-                    alert(`時間切れ！最終スコア: ${score}`);
-                    if (score >= 50) {
-                        document.getElementById('finalLink').classList.remove('hidden');
-                        document.getElementById('rewardButton').style.display = 'inline-block'; // リワードボタンを表示
-                        alert('おめでとうございます！リワードをゲットしました！');
+                    document.getElementById("userInput").disabled = true;
+
+                    if (score >= requiredScore) {
+                        document.getElementById("finalLink").style.display = "block";
+                        alert("おめでとうございます！リワードをゲットしました！");
+                    } else {
+                        alert("時間切れです！もう一度挑戦してください。");
                     }
                 }
             }, 1000);
         }
 
-        document.getElementById('clickButton').onclick = function() {
-            if (gameActive) {
+        function generateWord() {
+            currentWord = words[Math.floor(Math.random() * words.length)];
+            document.getElementById("wordDisplay").innerText = currentWord;
+            document.getElementById("userInput").value = "";
+            document.getElementById("userInput").focus();
+        }
+
+        document.getElementById("userInput").addEventListener("input", function() {
+            if (gameActive && this.value === currentWord) {
                 score++;
-                document.getElementById('status').innerText = `スコア: ${score}`;
-                
-                // タップ数が10の倍数の時に緊迫感を上げる
-                if (score % 10 === 0) {
-                    // 色味を変える
-                    switch (score / 10) {
-                        case 1:
-                            document.getElementById('clickButton').style.backgroundColor = "#ff9800"; // オレンジ
-                            break;
-                        case 2:
-                            document.getElementById('clickButton').style.backgroundColor = "#f44336"; // レッド
-                            break;
-                        case 3:
-                            document.getElementById('clickButton').style.backgroundColor = "#9c27b0"; // パープル
-                            break;
-                        case 4:
-                            document.getElementById('clickButton').style.backgroundColor = "#3f51b5"; // ブルー
-                            break;
-                        case 5:
-                            document.getElementById('clickButton').style.backgroundColor = "#2196f3"; // ライトブルー
-                            break;
-                    }
-                }
-
-                if (score >= 50) {
-                    document.getElementById('finalLink').classList.remove('hidden');
-                    document.getElementById('rewardButton').style.display = 'inline-block'; // リワードボタンを表示
-                    alert('おめでとうございます！リワードをゲットしました！');
-                    gameActive = false; // ゲームを終了
-                }
-            } else {
-                startGame(); // ゲームがまだ開始されていなければ開始
+                document.getElementById("score").innerText = score;
+                generateWord();
             }
-        };
+        });
 
-        document.getElementById('rewardButton').onclick = function() {
-            window.open("https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81", "_blank"); // リワードのリンクを新しいタブで開く
-        };
-
-        startGame();
+        function openLink() {
+            window.open("https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81", "_blank");
+        }
     </script>
 </body>
 </html>
