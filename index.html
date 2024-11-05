@@ -3,26 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>不思議なサイト</title>
+    <title>キャッシュバックキャンペーン</title>
     <style>
         body {
-            background-color: #2b2b2b;
-            color: white;
+            background-color: #f0f0f0;
+            color: #333;
             text-align: center;
             font-family: Arial, sans-serif;
             overflow: auto; /* スクロールを有効に */
         }
+        header {
+            background-color: #4caf50;
+            color: white;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
         .button, .number {
             display: inline-block;
-            padding: 20px;
+            padding: 15px;
             margin: 10px;
             background-color: #ff4500;
-            border-radius: 10px;
+            border-radius: 5px;
             cursor: pointer;
             text-decoration: none;
             color: white;
             font-size: 24px;
             transition: transform 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
         .button:hover, .number:hover {
             transform: scale(1.1);
@@ -45,10 +53,18 @@
             0% { text-shadow: 0 0 5px gold, 0 0 10px gold; }
             100% { text-shadow: 0 0 20px gold, 0 0 30px gold; }
         }
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
-    <h1>不思議なサイトへようこそ！</h1>
+    <header>
+        キャッシュバックキャンペーン
+    </header>
+    <h1>特定の順番で数字をクリックして、リワードを手に入れよう！</h1>
     <p>下の数字を正しい順番でクリックしてください。</p>
 
     <div id="numbers">
@@ -66,8 +82,12 @@
 
     <p id="status">まだ準備ができていません。</p>
     <div id="finalLink" class="hidden">
-        <a href="https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81" target="_blank" class="button divine">神々しいリンクをクリックしてメッセージを送信</a>
+        <a href="https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81" target="_blank" class="button divine">リワードをゲットする</a>
     </div>
+
+    <footer>
+        © 2024 キャッシュバックキャンペーン. All rights reserved.
+    </footer>
 
     <script>
         let clickOrder = [];
@@ -85,7 +105,7 @@
                     document.getElementById('status').innerText = 'すべてのアクションが完了しました！';
                 } else {
                     // 間違った順番の場合
-                    document.getElementById('status').innerText = 'エラー: 正しい電話番号を入力してください！';
+                    document.getElementById('status').innerText = 'エラー: 正しい順番でクリックしてください！';
                     clickOrder = []; // 順番をリセット
                 }
             }
