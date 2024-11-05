@@ -3,168 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>数学教師おちむの全員東大合格への道</title>
+    <title>逃げるゲーム</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
             background-color: #f0f0f0;
-            color: #333;
-            text-align: center;
         }
-        .story-container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-            background: #fff;
+        #gameArea {
+            position: relative;
+            width: 90vw;
+            height: 80vh;
+            background-color: #fff;
+            border: 3px solid #333;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
-        .text-box {
-            font-size: 18px;
-            margin-top: 20px;
-            min-height: 100px;
+        .player, .enemy, .goal {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
         }
-        .choice-button {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px;
-            font-size: 16px;
-            border-radius: 5px;
+        .player {
             background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
         }
-        .choice-button:hover {
-            background-color: #45A049;
+        .enemy {
+            background-color: #F44336;
         }
-        .reward-link {
-            font-size: 20px;
-            margin-top: 30px;
-            display: none;
-            color: blue;
-            text-decoration: underline;
-            cursor: pointer;
+        .goal {
+            background-color: #FFD700;
         }
     </style>
 </head>
 <body>
-    <div class="story-container">
-        <h1>数学教師おちむの全員東大合格への道</h1>
-        <div id="textBox" class="text-box">ここにストーリーが表示されます</div>
-        <div id="choicesContainer">
-            <!-- 選択肢ボタンが表示されます -->
-        </div>
-        <div id="finalLink" class="reward-link" onclick="openLink()">リンクを見る</div>
+    <div id="gameArea">
+        <div class="player" id="player" style="top: 20px; left: 20px;"></div>
+        <div class="enemy" id="enemy" style="top: 300px; left: 300px;"></div>
+        <div class="goal" id="goal" style="top: 400px; left: 700px;"></div>
     </div>
 
     <script>
-        const scenes = {
-            start: {
-                text: "数学教師のおちむ先生は、今年のクラス全員を東大に合格させるという大きな目標を持っています！まず、最初の授業でどのように生徒たちを引きつけるか考えます。",
-                choices: [
-                    { text: "導入に面白い数学クイズを出す", nextScene: "quiz" },
-                    { text: "東大合格の秘訣を語る", nextScene: "motivate" }
-                ]
-            },
-            quiz: {
-                text: "おちむ先生が数学クイズを出すと、生徒たちは興味津々！「先生、もっと教えてください！」という声があがりました。",
-                choices: [
-                    { text: "難しい問題にも挑戦させる", nextScene: "challenge" },
-                    { text: "基礎からゆっくり教える", nextScene: "basics" }
-                ]
-            },
-            motivate: {
-                text: "おちむ先生の「全員東大合格」宣言に、生徒たちは驚きますが、少しずつやる気が出てきました。「先生、私たち本当にやれるんですか？」",
-                choices: [
-                    { text: "やる気に満ちた授業計画を立てる", nextScene: "plan" },
-                    { text: "個別に面談を行う", nextScene: "individualTalk" }
-                ]
-            },
-            challenge: {
-                text: "難しい問題に挑戦する生徒たちは苦戦していましたが、「東大に行くにはこのくらいの難易度は必要だ！」と気合を入れます。",
-                choices: [
-                    { text: "生徒一人一人にフォローアップ", nextScene: "followUp" },
-                    { text: "課題が難しすぎてクラスが疲弊してしまう（バッドエンド）", nextScene: "badEnd" }
-                ]
-            },
-            basics: {
-                text: "基礎からゆっくりと教え始めたおちむ先生のおかげで、生徒たちは次第に自信をつけ始めました。",
-                choices: [
-                    { text: "さらに高い目標を設定する", nextScene: "raiseGoals" },
-                    { text: "試験問題に取り組ませる", nextScene: "examPractice" }
-                ]
-            },
-            plan: {
-                text: "やる気に満ちた授業計画を立てたおちむ先生に、クラス全体がついてきています。「先生、私たちやれる気がしてきました！」",
-                choices: [
-                    { text: "グループプロジェクトを設定", nextScene: "project" },
-                    { text: "東大過去問に挑戦させる", nextScene: "pastExam" }
-                ]
-            },
-            individualTalk: {
-                text: "生徒一人一人と面談を行い、それぞれの目標や不安を聞き出したおちむ先生。個別サポートがやる気につながりました。",
-                choices: [
-                    { text: "生徒をサポートする特別プログラムを導入", nextScene: "specialProgram" },
-                    { text: "試験対策に集中する", nextScene: "examFocus" }
-                ]
-            },
-            followUp: {
-                text: "生徒たちの疑問や課題を一つ一つフォローアップしていくことで、確実に力をつけていきました。",
-                choices: [
-                    { text: "週末特訓を行う", nextScene: "weekendTraining" },
-                    { text: "個別指導をさらに強化", nextScene: "intensiveSupport" }
-                ]
-            },
-            raiseGoals: {
-                text: "目標がさらに高くなり、生徒たちのやる気も高まっています。",
-                choices: [
-                    { text: "全員が試験に合格し、東大を目指す", nextScene: "happyEnd" },
-                    { text: "緊張がピークに達し、集中力が低下（バッドエンド）", nextScene: "badEnd" }
-                ]
-            },
-            badEnd: {
-                text: "生徒たちは疲れ果て、今年は目標に届きませんでした。また来年頑張ることに。",
-                choices: [
-                    { text: "スタートに戻る", nextScene: "start" }
-                ]
-            },
-            happyEnd: {
-                text: "おめでとうございます！おちむ先生のクラスは見事に全員東大合格を達成しました！あなたの努力が報われました！",
-                choices: []
+        const player = document.getElementById("player");
+        const enemy = document.getElementById("enemy");
+        const goal = document.getElementById("goal");
+        const gameArea = document.getElementById("gameArea");
+        let playerSpeed = 20;
+        let enemySpeed = 2;
+        let gameActive = true;
+
+        // プレイヤーを動かす
+        document.addEventListener("keydown", (e) => {
+            if (!gameActive) return;
+            let rect = player.getBoundingClientRect();
+            let gameAreaRect = gameArea.getBoundingClientRect();
+
+            switch (e.key) {
+                case "ArrowUp":
+                    if (rect.top > gameAreaRect.top) player.style.top = rect.top - gameAreaRect.top - playerSpeed + "px";
+                    break;
+                case "ArrowDown":
+                    if (rect.bottom < gameAreaRect.bottom) player.style.top = rect.top - gameAreaRect.top + playerSpeed + "px";
+                    break;
+                case "ArrowLeft":
+                    if (rect.left > gameAreaRect.left) player.style.left = rect.left - gameAreaRect.left - playerSpeed + "px";
+                    break;
+                case "ArrowRight":
+                    if (rect.right < gameAreaRect.right) player.style.left = rect.left - gameAreaRect.left + playerSpeed + "px";
+                    break;
             }
-        };
 
-        let currentScene = "start";
+            checkCollision();
+        });
 
-        function displayScene(scene) {
-            const sceneData = scenes[scene];
-            document.getElementById("textBox").innerText = sceneData.text;
+        // 敵の移動
+        function moveEnemy() {
+            let playerRect = player.getBoundingClientRect();
+            let enemyRect = enemy.getBoundingClientRect();
 
-            const choicesContainer = document.getElementById("choicesContainer");
-            choicesContainer.innerHTML = "";
-            sceneData.choices.forEach(choice => {
-                const button = document.createElement("button");
-                button.className = "choice-button";
-                button.innerText = choice.text;
-                button.onclick = () => {
-                    displayScene(choice.nextScene);
-                    if (choice.nextScene === "happyEnd") {
-                        document.getElementById("finalLink").style.display = "block";
-                    } else {
-                        document.getElementById("finalLink").style.display = "none";
-                    }
-                };
-                choicesContainer.appendChild(button);
-            });
+            let dx = playerRect.left - enemyRect.left;
+            let dy = playerRect.top - enemyRect.top;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance > 1) {
+                enemy.style.left = enemyRect.left + (dx / distance) * enemySpeed + "px";
+                enemy.style.top = enemyRect.top + (dy / distance) * enemySpeed + "px";
+            }
+
+            checkCollision();
+            if (gameActive) requestAnimationFrame(moveEnemy);
         }
 
-        function openLink() {
-            window.open("https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81", "_blank");
+        // ゴールと敵との当たり判定
+        function checkCollision() {
+            let playerRect = player.getBoundingClientRect();
+            let goalRect = goal.getBoundingClientRect();
+            let enemyRect = enemy.getBoundingClientRect();
+
+            if (
+                playerRect.left < goalRect.right &&
+                playerRect.right > goalRect.left &&
+                playerRect.top < goalRect.bottom &&
+                playerRect.bottom > goalRect.top
+            ) {
+                alert("おめでとうございます！ゴールしました！");
+                gameActive = false;
+            }
+
+            if (
+                playerRect.left < enemyRect.right &&
+                playerRect.right > enemyRect.left &&
+                playerRect.top < enemyRect.bottom &&
+                playerRect.bottom > enemyRect.top
+            ) {
+                alert("敵に捕まりました！ゲームオーバーです！");
+                gameActive = false;
+            }
         }
 
-        displayScene(currentScene);
+        moveEnemy();
     </script>
 </body>
 </html>
