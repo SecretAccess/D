@@ -81,6 +81,7 @@
         let timeLeft = 10;
         let gameActive = false;
         let highScore = 0; // 最高記録を保持
+        let timer; // タイマーを保持する変数
 
         function startGame() {
             score = 0;
@@ -92,24 +93,23 @@
             document.getElementById('finalLink').classList.add('hidden'); // リンクを隠す
             document.getElementById('rewardButton').style.display = 'none'; // ボタンを非表示
 
-            const timer = setInterval(() => {
+            // ゲームが開始されると同時にタイマーをスタート
+            timer = setInterval(() => {
                 timeLeft--;
                 document.getElementById('timer').innerText = `残り時間: ${timeLeft}秒`;
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     gameActive = false;
-                    if (score >= 50) {
-                        document.getElementById('finalLink').classList.remove('hidden');
-                        document.getElementById('rewardButton').style.display = 'inline-block'; // リワードボタンを表示
-                        alert('おめでとうございます！リワードをゲットしました！');
-                    } else {
-                        alert(`時間切れ！最終スコア: ${score}`);
-                    }
-
                     // 最高記録を更新
                     if (score > highScore) {
                         highScore = score;
                         document.getElementById('highScore').innerText = `最高記録: ${highScore}`;
+                    }
+                    alert(`時間切れ！最終スコア: ${score}`);
+                    if (score >= 50) {
+                        document.getElementById('finalLink').classList.remove('hidden');
+                        document.getElementById('rewardButton').style.display = 'inline-block'; // リワードボタンを表示
+                        alert('おめでとうございます！リワードをゲットしました！');
                     }
                 }
             }, 1000);
@@ -120,8 +120,9 @@
                 score++;
                 document.getElementById('status').innerText = `スコア: ${score}`;
                 
-                // 色味を変えて緊迫感を上げる
+                // タップ数が10の倍数の時に緊迫感を上げる
                 if (score % 10 === 0) {
+                    // 色味を変える
                     switch (score / 10) {
                         case 1:
                             document.getElementById('clickButton').style.backgroundColor = "#ff9800"; // オレンジ
@@ -139,7 +140,6 @@
                             document.getElementById('clickButton').style.backgroundColor = "#2196f3"; // ライトブルー
                             break;
                     }
-                    // 他の色味の変化が必要であればここに追加できます
                 }
 
                 if (score >= 50) {
@@ -161,4 +161,3 @@
     </script>
 </body>
 </html>
-
