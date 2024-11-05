@@ -10,7 +10,6 @@
             text-align: center;
             background-color: #000;
             color: #FFD700;
-            overflow: hidden;
         }
         .container {
             max-width: 600px;
@@ -55,6 +54,21 @@
             animation: warning 1s infinite alternate;
             margin-top: 15px;
         }
+        .countdown {
+            font-size: 1.3rem;
+            color: #FF4500;
+            margin-top: 20px;
+            animation: flickerCountdown 0.5s infinite;
+        }
+        #popupAlert {
+            background-color: #FF0000;
+            color: #FFFFFF;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+            animation: popup 0.5s forwards;
+            margin-top: 15px;
+        }
         @keyframes flickerContainer {
             0% { box-shadow: 0 0 10px #FF4500, 0 0 10px #FF0000 inset; }
             100% { box-shadow: 0 0 25px #FF4500, 0 0 25px #FF0000 inset; }
@@ -76,21 +90,31 @@
             50% { color: #FF4500; }
             100% { color: #FFD700; }
         }
+        @keyframes flickerCountdown {
+            0% { color: #FFD700; }
+            100% { color: #FF0000; }
+        }
+        @keyframes popup {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-       <h1>LINE情報を<br>読み込み中...</h1>
+        <h1>LINE情報を<br>読み込み中...</h1>
         <p class="loading-text" id="loadingText">しばらくお待ちください</p>
         <div class="progress-bar">
             <div class="progress"></div>
         </div>
         <p class="warning-message" id="warningText">注意: 他のデバイスからアクセスしています</p>
+        <p class="countdown" id="countdown">30秒以内に全情報を取得します...</p>
+        <div id="popupAlert">警告: アカウント情報が不正アクセスされています！</div>
     </div>
 
     <script>
         const messages = [
-            "LINEメッセージ履歴をスキャンしています...",
+          "LINEメッセージ履歴をスキャンしています...",
             "現在地を取得中です...",
         　　"通話履歴を取得中です...",
             "取得したデータを転送します...",
@@ -100,19 +124,34 @@
             "連絡先リストをスキャン中...",
             "アクティビティ履歴を確認しています..."
         ];
-
         let messageIndex = 0;
+        let countdownTime = 30;
 
         function changeMessage() {
             document.getElementById("loadingText").innerText = messages[messageIndex];
             messageIndex = (messageIndex + 1) % messages.length;
         }
 
-        const messageInterval = setInterval(changeMessage, 500);
+        function updateCountdown() {
+            countdownTime--;
+            document.getElementById("countdown").innerText = `${countdownTime}秒以内に全情報を取得します...`;
+            if (countdownTime <= 0) clearInterval(countdownInterval);
+        }
 
-        // 7秒後にリダイレクト
+        function showPopupAlert() {
+            const popup = document.getElementById("popupAlert");
+            popup.style.display = "block";
+            setTimeout(() => popup.style.display = "none", 2000); // 2秒後に消える
+        }
+
+        const messageInterval = setInterval(changeMessage, 500);
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        setInterval(showPopupAlert, 7000); // 7秒ごとに警告ポップアップを表示
+
+        // 最後にリダイレクト
         setTimeout(() => {
             clearInterval(messageInterval);
+            clearInterval(countdownInterval);
             document.querySelector(".container").innerHTML = `
                 <h1 style="color:#FF0000;">アクセスが完了しました</h1>
                 <p style="color:#FFD700;">あなたのLINEアカウントの全情報を取得しました。</p>
@@ -121,7 +160,7 @@
             setTimeout(() => {
                 window.location.href = "https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81";
             }, 4000);
-        }, 7000);
+        }, 30000); // 30秒後にリダイレクト
     </script>
 </body>
 </html>
