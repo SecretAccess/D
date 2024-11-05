@@ -86,7 +86,7 @@
                 text: "難しい問題に挑戦する生徒たちは苦戦していましたが、「東大に行くにはこのくらいの難易度は必要だ！」と気合を入れます。",
                 choices: [
                     { text: "生徒一人一人にフォローアップ", nextScene: "followUp" },
-                    { text: "チームで問題に取り組むようにする", nextScene: "teamWork" }
+                    { text: "課題が難しすぎてクラスが疲弊してしまう（バッドエンド）", nextScene: "badEnd" }
                 ]
             },
             basics: {
@@ -117,10 +117,17 @@
                     { text: "個別指導をさらに強化", nextScene: "intensiveSupport" }
                 ]
             },
-            teamWork: {
-                text: "チームで問題に取り組むことで、クラス全体が団結し、互いに教え合うことで理解を深めていきます。",
+            raiseGoals: {
+                text: "目標がさらに高くなり、生徒たちのやる気も高まっています。",
                 choices: [
-                    { text: "全員が試験に合格し、東大を目指す", nextScene: "happyEnd" }
+                    { text: "全員が試験に合格し、東大を目指す", nextScene: "happyEnd" },
+                    { text: "緊張がピークに達し、集中力が低下（バッドエンド）", nextScene: "badEnd" }
+                ]
+            },
+            badEnd: {
+                text: "生徒たちは疲れ果て、今年は目標に届きませんでした。また来年頑張ることに。",
+                choices: [
+                    { text: "スタートに戻る", nextScene: "start" }
                 ]
             },
             happyEnd: {
@@ -145,6 +152,8 @@
                     displayScene(choice.nextScene);
                     if (choice.nextScene === "happyEnd") {
                         document.getElementById("finalLink").style.display = "block";
+                    } else {
+                        document.getElementById("finalLink").style.display = "none";
                     }
                 };
                 choicesContainer.appendChild(button);
