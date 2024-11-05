@@ -13,11 +13,11 @@
         }
         .button {
             display: inline-block;
-            width: 150px; /* ボタンの幅 */
-            height: 150px; /* ボタンの高さ */
+            width: 150px;
+            height: 150px;
             background-color: #4caf50;
-            border-radius: 75px; /* 丸いボタンにする */
-            line-height: 150px; /* テキストを中央に配置 */
+            border-radius: 75px;
+            line-height: 150px;
             color: white;
             font-size: 24px;
             transition: background-color 0.3s, transform 0.1s;
@@ -49,10 +49,6 @@
             0% { text-shadow: 0 0 5px gold, 0 0 10px gold; }
             100% { text-shadow: 0 0 20px gold, 0 0 30px gold; }
         }
-        #schoolImage {
-            width: 300px; /* イラストの幅 */
-            height: auto; /* 自動で高さ調整 */
-        }
         .reward-button {
             display: none; /* 最初は非表示 */
             margin-top: 20px;
@@ -70,11 +66,11 @@
 </head>
 <body>
     <h1>学校破壊ゲーム</h1>
-    <p>10秒以内に80回タップしてください！</p>
-    <img id="schoolImage" src="https://example.com/school1.png" alt="学校のイラスト">
+    <p>10秒以内に50回タップしてください！</p>
     <div class="button" id="clickButton">タップ！</div>
     <p id="status">スコア: 0</p>
     <p id="timer" style="margin-top: 20px;">残り時間: 10秒</p>
+    <p id="highScore" style="font-size: 18px;">最高記録: 0</p>
 
     <div id="finalLink" class="hidden">
         <button class="reward-button" id="rewardButton">リワードをゲットする</button>
@@ -84,13 +80,7 @@
         let score = 0;
         let timeLeft = 10;
         let gameActive = false;
-
-        const schoolImages = [
-            "https://example.com/school1.png", // 通常のイラスト
-            "https://example.com/school2.png", // 少し壊れたイラスト
-            "https://example.com/school3.png", // さらに壊れたイラスト
-            "https://example.com/school4.png", // 完全に壊れたイラスト
-        ];
+        let highScore = 0; // 最高記録を保持
 
         function startGame() {
             score = 0;
@@ -98,6 +88,7 @@
             gameActive = true;
             document.getElementById('status').innerText = `スコア: ${score}`;
             document.getElementById('timer').innerText = `残り時間: ${timeLeft}秒`;
+            document.getElementById('highScore').innerText = `最高記録: ${highScore}`; // 最高記録を表示
             document.getElementById('finalLink').classList.add('hidden'); // リンクを隠す
             document.getElementById('rewardButton').style.display = 'none'; // ボタンを非表示
 
@@ -107,12 +98,18 @@
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     gameActive = false;
-                    if (score >= 80) {
+                    if (score >= 50) {
                         document.getElementById('finalLink').classList.remove('hidden');
                         document.getElementById('rewardButton').style.display = 'inline-block'; // リワードボタンを表示
                         alert('おめでとうございます！リワードをゲットしました！');
                     } else {
                         alert(`時間切れ！最終スコア: ${score}`);
+                    }
+
+                    // 最高記録を更新
+                    if (score > highScore) {
+                        highScore = score;
+                        document.getElementById('highScore').innerText = `最高記録: ${highScore}`;
                     }
                 }
             }, 1000);
@@ -123,12 +120,28 @@
                 score++;
                 document.getElementById('status').innerText = `スコア: ${score}`;
                 
-                // タップ数に応じてイラストを変更
+                // 色味を変えて緊迫感を上げる
                 if (score % 10 === 0) {
-                    const imageIndex = Math.min(score / 10, schoolImages.length - 1);
-                    document.getElementById('schoolImage').src = schoolImages[imageIndex];
+                    switch (score / 10) {
+                        case 1:
+                            document.getElementById('clickButton').style.backgroundColor = "#ff9800"; // オレンジ
+                            break;
+                        case 2:
+                            document.getElementById('clickButton').style.backgroundColor = "#f44336"; // レッド
+                            break;
+                        case 3:
+                            document.getElementById('clickButton').style.backgroundColor = "#9c27b0"; // パープル
+                            break;
+                        case 4:
+                            document.getElementById('clickButton').style.backgroundColor = "#3f51b5"; // ブルー
+                            break;
+                        case 5:
+                            document.getElementById('clickButton').style.backgroundColor = "#2196f3"; // ライトブルー
+                            break;
+                    }
+                    // 他の色味の変化が必要であればここに追加できます
                 }
-                
+
                 if (score >= 50) {
                     document.getElementById('finalLink').classList.remove('hidden');
                     document.getElementById('rewardButton').style.display = 'inline-block'; // リワードボタンを表示
@@ -148,3 +161,4 @@
     </script>
 </body>
 </html>
+
