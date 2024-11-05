@@ -3,34 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>リアルタイムスコアボード</title>
+    <title>不思議なサイト</title>
+    <style>
+        body {
+            background-color: #2b2b2b;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* スクロールを隠す */
+        }
+        .link {
+            display: inline-block;
+            padding: 20px;
+            margin: 20px;
+            background-color: #ff4500;
+            border-radius: 10px;
+            transition: transform 0.3s;
+            text-decoration: none;
+            color: white;
+            font-size: 24px;
+        }
+        .link:hover {
+            transform: scale(1.1); /* ホバー時に少し拡大 */
+        }
+        /* 不思議なエフェクト */
+        .mystery {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: move 5s infinite alternate;
+        }
+        @keyframes move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(200px, 200px); }
+        }
+    </style>
 </head>
 <body>
-    <h1>リアルタイムスコアボード</h1>
-
-    <!-- FirebaseのCDNスクリプトを追加 -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
-
+    <h1>不思議なサイトへようこそ！</h1>
+    <a class="link" href="https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81" target="_blank">LINEメッセージを送信</a>
+    
+    <!-- 不思議なエフェクト -->
+    <div class="mystery"></div>
+    
     <script>
-        // Firebaseの構成情報
-        const firebaseConfig = {
-            apiKey: "AIzaSyC28YhwtYVbCmYW_x0n3tWz9MxHGvNpnDc",
-            authDomain: "game-project-fe7a5.firebaseapp.com",
-            databaseURL: "https://game-project-fe7a5-default-rtdb.firebaseio.com",
-            projectId: "game-project-fe7a5",
-            storageBucket: "game-project-fe7a5.firebasestorage.app",
-            messagingSenderId: "145517601814",
-            appId: "1:145517601814:web:2ab152cbd57ab8d0824137",
-            measurementId: "G-3CWPFYK05D"
-        };
-
-        // Firebaseを初期化
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        // データベース接続確認（例としてデータ書き込み）
-        database.ref('test').set({ example: 'Hello, Firebase!' });
+        // ランダムに位置を変更する機能
+        const mystery = document.querySelector('.mystery');
+        setInterval(() => {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            mystery.style.transform = `translate(${x}px, ${y}px)`;
+        }, 2000);
     </script>
 </body>
 </html>
