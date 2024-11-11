@@ -25,20 +25,14 @@
         50% { opacity: 0; }
     }
     .notification-box {
-        border: 3px solid #d32f2f;
+        border: 2px solid #d32f2f;
         background-color: #fff3e0;
-        padding: 15px;
+        padding: 10px;
         margin-bottom: 20px;
         text-align: center;
         font-weight: bold;
         color: #d32f2f;
         font-size: 1.1em;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
     }
     .product {
         display: flex;
@@ -66,7 +60,6 @@
     .purchased {
         color: #d32f2f;
         font-weight: bold;
-        animation: blink 1s infinite;
     }
 </style>
 </head>
@@ -74,7 +67,7 @@
 
 <h1>🔥激安100円セール！<br>今すぐ購入🔥</h1>
 
-<div class="notification-box" id="notification">ここにリアルタイムの購入者情報が表示されます</div>
+<div class="notification-box" id="notification"></div>
 
 <div id="products"></div>
 
