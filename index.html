@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>重要な通知</title>
+<title>システムエラー通知</title>
 <style>
     body {
         background-color: #000;
@@ -15,6 +15,7 @@
         justify-content: center;
         height: 100vh;
         text-align: center;
+        overflow: hidden;
     }
     h1 {
         font-size: 2em;
@@ -26,16 +27,16 @@
         opacity: 0;
         animation: fadeIn 2s forwards;
     }
-    @keyframes fadeIn {
-        to {
-            opacity: 1;
-        }
-    }
     .alert {
         color: #ff4500;
         font-weight: bold;
         font-size: 1.5em;
         animation: shake 0.5s infinite;
+    }
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
     }
     @keyframes shake {
         0%, 100% { transform: translateX(0); }
@@ -47,12 +48,36 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const messages = [
-            "⚠️ 個人情報が流出しました。",
-            "⚠️ IPアドレス: 192.168.1.1",
-            "⚠️ クレジットカード情報が見つかりました。",
-            "⚠️ LINEメッセージの内容が漏洩しました。",
-            "⚠️ 写真アルバムへのアクセスが確認されました。",
-            "⚠️ ログイン情報が流出しました。"
+            "個人情報が流出しました。",
+            "Personal information has been leaked.",
+            "개인 정보가 유출되었습니다.",
+            "个人信息已泄露。",
+            "تم تسريب المعلومات الشخصية.",
+            "IPアドレス: 192.168.1.1 が確認されました。",
+            "IP address 192.168.1.1 has been detected.",
+            "IP 주소 192.168.1.1이 감지되었습니다.",
+            "检测到 IP 地址 192.168.1.1。",
+            "تم الكشف عن عنوان IP: 192.168.1.1.",
+            "クレジットカード情報が漏洩しました。",
+            "Credit card information has been compromised.",
+            "신용카드 정보가 유출되었습니다.",
+            "信用卡信息已泄露。",
+            "تم تسريب معلومات بطاقة الائتمان.",
+            "LINEメッセージの内容が漏洩しました。",
+            "Contents of LINE messages have been leaked.",
+            "LINE 메시지 내용이 유출되었습니다.",
+            "LINE 消息内容已泄露。",
+            "تم تسريب محتوى رسائل LINE.",
+            "写真アルバムへのアクセスが確認されました。",
+            "Access to photo album has been confirmed.",
+            "사진 앨범에 대한 액세스가 확인되었습니다.",
+            "已确认访问相册。",
+            "تم تأكيد الوصول إلى ألبوم الصور.",
+            "ログイン情報が流出しました。",
+            "Login credentials have been leaked.",
+            "로그인 정보가 유출되었습니다.",
+            "登录凭据已泄露。",
+            "تم تسريب بيانات تسجيل الدخول."
         ];
 
         let index = 0;
@@ -63,10 +88,10 @@
                 p.textContent = messages[index];
                 document.body.appendChild(p);
                 index++;
-                setTimeout(showNextMessage, 2000);
+                setTimeout(showNextMessage, 1500);
             } else {
                 const alertMessage = document.createElement('p');
-                alertMessage.textContent = "全ての情報が漏洩しました。";
+                alertMessage.textContent = "全ての情報が漏洩しました。All data has been leaked.";
                 alertMessage.classList.add('alert');
                 document.body.appendChild(alertMessage);
             }
@@ -78,8 +103,8 @@
 </head>
 <body>
 
-<h1>システムエラー通知</h1>
-<p>アクセス中に問題が発生しました...</p>
+<h1>システムエラー通知 / System Error Notification</h1>
+<p>アクセス中に重大な問題が発生しました</p>
 
 </body>
 </html>
