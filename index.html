@@ -11,8 +11,8 @@
         font-family: 'Courier New', Courier, monospace;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        align-items: flex-start;
+        justify-content: flex-start;
         height: 100vh;
         padding: 20px;
         overflow: hidden;
@@ -20,10 +20,9 @@
     .message {
         font-size: 1.2em;
         line-height: 1.5;
-        text-align: left;
+        white-space: pre-wrap;
         width: 100%;
         max-width: 600px;
-        white-space: pre-wrap;
     }
     @keyframes blink {
         0%, 100% { opacity: 1; }
@@ -44,38 +43,43 @@
 
 <script>
     const messages = [
-        "Personal information has been leaked",
-        "个人信息已泄露",
-        "個人情報が流出しました",
-        "개인 정보가 유출되었습니다",
-        "تم تسريب المعلومات الشخصية",
-        "IP address 192.168.1.1 detected",
-        "检测到 IP 地址 192.168.1.1",
-        "IPアドレス 192.168.1.1 が検出されました",
-        "IP 주소 192.168.1.1이 감지되었습니다",
-        "تم الكشف عن عنوان IP: 192.168.1.1",
-        "Credit card information compromised",
-        "信用卡信息已泄露",
-        "クレジットカード情報が漏洩しました",
-        "신용카드 정보가 유출되었습니다",
-        "تم تسريب معلومات بطاقة الائتمان",
-        "Access to photo albums detected",
-        "已确认访问相册",
-        "写真アルバムへのアクセスが確認されました",
-        "사진 앨범에 대한 액세스가 확인되었습니다",
-        "تم تأكيد الوصول إلى ألبوم الصور",
-        "Login credentials have been leaked",
-        "登录凭据已泄露",
-        "ログイン情報が流出しました",
-        "로그인 정보가 유출되었습니다",
-        "تم تسريب بيانات تسجيل الدخول",
-        "All data has been leaked"
+        "Personal info leaked: Name, age, address",
+        "Detected IP: 192.168.1.1",
+        "Credit card number found: **** **** **** 1234",
+        "Accessing photo album... Found 2,342 photos",
+        "Email contents are being read",
+        "Browsing history: Top 10 visited sites",
+        "Detected: Recent searches - 'How to hide money'",
+        "Leaking contact list (230 contacts)",
+        "Access to WhatsApp messages: 1,239 chats",
+        "Location tracking activated",
+        "Found passwords: Gmail, Facebook, Instagram",
+        "Searching phone storage... Found secret folder",
+        "Camera activated... Capturing front camera",
+        "Microphone activated... Recording audio",
+        "Detected connected devices: 5 devices",
+        "Bluetooth access: Syncing data from nearby devices",
+        "Uploading all local files to server",
+        "Accessing clipboard data: Copied text found",
+        "Searching bank account details...",
+        "Found recent bank transactions",
+        "Tracking app usage: High usage of social media",
+        "VPN disconnected. IP exposed",
+        "Streaming video from gallery... Complete",
+        "Detected dark web searches: 'Buy fake ID'",
+        "Phone number leaked: +1 123-456-7890",
+        "Complete access to SMS messages",
+        "Detected attempts to delete files",
+        "Accessing cloud storage... Downloading",
+        "Contacting all connected devices",
+        "Live screen recording started",
+        "Data collection: 100% complete. Uploading"
     ];
 
     const messageElement = document.getElementById('message');
     let messageIndex = 0;
     let charIndex = 0;
-    const typingSpeed = 10; // 超高速表示
+    const typingSpeed = 10; // 高速表示
     const messageDelay = 100; // メッセージ切り替えの遅延時間
 
     function typeMessage() {
@@ -88,7 +92,10 @@
                 messageElement.textContent += "\n";
                 charIndex = 0;
                 messageIndex++;
-                setTimeout(typeMessage, messageDelay);
+                setTimeout(() => {
+                    window.scrollTo(0, document.body.scrollHeight);
+                    typeMessage();
+                }, messageDelay);
             }
         }
     }
