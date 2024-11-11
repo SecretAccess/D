@@ -1,175 +1,64 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LINE情報読み込み中...</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #000;
-            color: #FFD700;
-            overflow: hidden;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>逃げ回るリンク - スマホ向け</title>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f8ff;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+        position: relative;
+    }
+    .moving-link {
+        font-size: 1.2em;
+        color: #007bff;
+        text-decoration: underline;
+        position: absolute;
+        cursor: pointer;
+        transition: transform 0.2s;
+        max-width: 80%;
+        text-align: center;
+    }
+    .moving-link:hover {
+        transform: scale(1.2);
+    }
+</style>
+<script>
+    const link = document.querySelector('.moving-link');
+
+    function moveLink() {
+        const x = Math.random() * (window.innerWidth - 150);
+        const y = Math.random() * (window.innerHeight - 100);
+        link.style.left = `${x}px`;
+        link.style.top = `${y}px`;
+    }
+
+    document.addEventListener('touchmove', (e) => {
+        const touch = e.touches[0];
+        const linkRect = link.getBoundingClientRect();
+        const distanceX = Math.abs(touch.clientX - (linkRect.left + linkRect.width / 2));
+        const distanceY = Math.abs(touch.clientY - (linkRect.top + linkRect.height / 2));
+
+        if (distanceX < 100 && distanceY < 50) {
+            moveLink();
         }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #111;
-            border: 5px solid #FF0000;
-            border-radius: 15px;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8), 0 0 15px #FF4500 inset;
-            animation: flickerContainer 1s infinite alternate;
-        }
-        h1 {
-            font-size: 2.5rem;
-            color: #FF0000;
-            text-shadow: 0 0 10px #FF4500, 0 0 15px #FF0000;
-            animation: flickerTitle 2s infinite alternate;
-        }
-        .loading-text {
-            font-size: 1.2rem;
-            margin: 20px 0;
-            color: #FF4500;
-            animation: flickerText 1s infinite alternate;
-        }
-        .progress-bar {
-            width: 100%;
-            background-color: #222;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.6), inset 0 0 5px rgba(255, 0, 0, 0.7);
-            margin-bottom: 30px;
-        }
-        .progress {
-            width: 0;
-            height: 20px;
-            background: linear-gradient(90deg, #FF0000, #FF4500, #FF0000);
-            animation: progress 2s linear infinite;
-        }
-        .warning-message, .countdown {
-            font-size: 1.1rem;
-            color: #FFD700;
-            animation: warning 1s infinite alternate;
-            margin-top: 15px;
-        }
-        #securityPrompt, #schoolInput, #submitCode {
-            display: none;
-            font-size: 1.1rem;
-            color: #FFD700;
-            margin-top: 15px;
-        }
-        #schoolInput {
-            padding: 10px;
-            border: 2px solid #FF4500;
-            border-radius: 5px;
-            width: 60%;
-            background-color: #333;
-            color: #FFD700;
-        }
-        #submitCode {
-            padding: 10px 20px;
-            background-color: #FF4500;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0 0 10px #FF4500;
-            margin-top: 10px;
-        }
-        #submitCode:hover {
-            background-color: #FF0000;
-        }
-        @keyframes flickerContainer {
-            0% { box-shadow: 0 0 10px #FF4500, 0 0 10px #FF0000 inset; }
-            100% { box-shadow: 0 0 25px #FF4500, 0 0 25px #FF0000 inset; }
-        }
-        @keyframes flickerTitle {
-            0% { text-shadow: 0 0 10px #FF4500, 0 0 20px #FF0000; }
-            100% { text-shadow: 0 0 20px #FF4500, 0 0 30px #FF0000; }
-        }
-        @keyframes flickerText {
-            0% { color: #FFD700; }
-            100% { color: #FF4500; }
-        }
-        @keyframes progress {
-            0% { width: 0; }
-            100% { width: 100%; }
-        }
-        @keyframes warning {
-            0% { color: #FFD700; }
-            50% { color: #FF4500; }
-            100% { color: #FFD700; }
-        }
-    </style>
+    });
+
+    link.addEventListener('click', () => {
+        alert('よく捕まえました！リンク先へ移動します。');
+        window.location.href = "https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81";
+    });
+</script>
 </head>
 <body>
-    <div class="container">
-        <h1>LINE情報を<br>読み込み中...</h1>
-        <p class="loading-text" id="loadingText">しばらくお待ちください</p>
-        <div class="progress-bar">
-            <div class="progress"></div>
-        </div>
-        <p class="countdown" id="countdown">171秒以内に全情報を取得します...</p>
-        <p id="securityPrompt">解除するにはあなたの出身中学を入力してください:</p>
-        <input type="text" id="schoolInput" placeholder="出身中学を入力">
-        <button onclick="validateInput()" id="submitCode">送信</button>
-    </div>
 
-    <script>
-        const messages = [
-            "LINEトーク履歴を読込中...",
-            "現在地を取得中...",
-            "通話履歴を取得中...",
-            "取得したデータを転送中...",
-            "LINEアカウント情報の解析中...",
-            "画像データを確認中...",
-            "連絡先リストをスキャン中...",
-            "アクティビティ履歴を確認中..."
-        ];
-        let messageIndex = 0;
-        let countdownTime = 171;
-        const correctAnswers = ["稲井", "稲井中", "稲井中学校"];
+<a class="moving-link">▶ こちらのリンクをタップして秘密を発見する</a>
 
-        function changeMessage() {
-            document.getElementById("loadingText").innerText = messages[messageIndex];
-            messageIndex = (messageIndex + 1) % messages.length;
-        }
-
-        function updateCountdown() {
-            countdownTime--;
-            document.getElementById("countdown").innerText = `${countdownTime}秒以内に全情報を取得します...`;
-            if (countdownTime <= 0) clearInterval(countdownInterval);
-        }
-
-        function validateInput() {
-            const input = document.getElementById("schoolInput").value.trim();
-            if (correctAnswers.includes(input)) {
-                clearInterval(countdownInterval);
-                document.querySelector(".container").innerHTML = `
-                    <h1 style="color:#FF0000;">アクセスが完了しました</h1>
-                    <p style="color:#FFD700;">あなたのLINEアカウントの全情報を取得しました。</p>
-                    <p style="color:#FFD700;">数秒後にページが移動します...</p>
-                `;
-                setTimeout(() => {
-                    window.location.href = "https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81";
-                }, 3000);
-            } else {
-                alert("不正な入力です。カウントダウンは続行します。");
-                document.getElementById("schoolInput").value = "";
-            }
-        }
-
-        function showInputField() {
-            document.getElementById("securityPrompt").style.display = "block";
-            document.getElementById("schoolInput").style.display = "block";
-            document.getElementById("submitCode").style.display = "inline-block";
-        }
-
-        setTimeout(showInputField, 10000); // 10秒後に解除コード入力フィールドを表示
-        setInterval(changeMessage, 500);
-        const countdownInterval = setInterval(updateCountdown, 1000);
-    </script>
 </body>
 </html>
