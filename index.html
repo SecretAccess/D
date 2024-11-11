@@ -16,12 +16,29 @@
     h1 {
         text-align: center;
         color: #d32f2f;
-        font-size: 2em;
+        font-size: 2.2em;
+        margin-bottom: 10px;
         animation: blink 1s infinite;
     }
     @keyframes blink {
         0%, 100% { opacity: 1; }
         50% { opacity: 0; }
+    }
+    .notification-box {
+        border: 3px solid #d32f2f;
+        background-color: #fff3e0;
+        padding: 15px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: bold;
+        color: #d32f2f;
+        font-size: 1.1em;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
     }
     .product {
         display: flex;
@@ -30,7 +47,7 @@
         padding: 10px 0;
     }
     .product img {
-        width: 50px; /* 画像サイズを小さく調整 */
+        width: 50px;
         height: 50px;
         margin-right: 20px;
         border: 2px solid #d32f2f;
@@ -44,18 +61,12 @@
         padding: 10px;
         border: none;
         cursor: pointer;
-        animation: pulse 1.5s infinite;
         font-size: 0.9em;
     }
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-    }
-    .notification {
+    .purchased {
         color: #d32f2f;
         font-weight: bold;
-        margin-top: 20px;
-        text-align: center;
+        animation: blink 1s infinite;
     }
 </style>
 </head>
@@ -63,8 +74,9 @@
 
 <h1>🔥激安100円セール！<br>今すぐ購入🔥</h1>
 
+<div class="notification-box" id="notification">ここにリアルタイムの購入者情報が表示されます</div>
+
 <div id="products"></div>
-<div class="notification" id="notification"></div>
 
 <script>
     const products = [
@@ -76,8 +88,8 @@
     ];
 
     const initials = "AEHIKMNORSTUWY";
-    const productContainer = document.getElementById('products');
     const notificationElement = document.getElementById('notification');
+    const productContainer = document.getElementById('products');
 
     // ローカルストレージから在庫を読み込み
     products.forEach((product, index) => {
@@ -98,12 +110,21 @@
                 <div class="info">
                     <h2>${product.name}</h2>
                     <p>価格: ¥${product.price}</p>
-                    <p>在庫: <span id="stock-${index}">${product.stock}</span> 個</p>
+                    <p>在庫: <span id="stock-${index}">${product.stock}</span> 個 <span id="purchased-${index}" class="purchased"></span></p>
                 </div>
                 <button class="buy-button" onclick="buyProduct(${index})">購入する</button>
             `;
             productContainer.appendChild(productElement);
         });
+    }
+
+    // 購入ボタンの機能
+    function buyProduct(index) {
+        if (products[index].stock > 0) {
+            window.location.href = "https://inaijhs95.my.canva.site/secret2025";
+        } else {
+            alert("在庫がありません。");
+        }
     }
 
     // 在庫をランダムに減らす関数
@@ -113,7 +134,17 @@
             products[index].stock--;
             localStorage.setItem(`stock-${index}`, products[index].stock);
             displayProducts();
+            showPurchasedMessage(index);
         }
+    }
+
+    // 購入されましたメッセージを表示
+    function showPurchasedMessage(index) {
+        const purchasedElement = document.getElementById(`purchased-${index}`);
+        purchasedElement.textContent = "購入されました！";
+        setTimeout(() => {
+            purchasedElement.textContent = "";
+        }, 3000);
     }
 
     // 購入速報を表示する関数
