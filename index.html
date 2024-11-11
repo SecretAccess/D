@@ -3,73 +3,121 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>渦巻く名前のサイト</title>
+<title>激安ブランド品販売サイト</title>
 <style>
     body {
-        background-color: #000;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+        background-color: #f0f0f0;
         font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
     }
-    .name {
-        position: absolute;
-        font-size: 1.5em;
-        color: #00ff00;
-        white-space: nowrap;
-        transform-origin: center;
+    h1 {
+        text-align: center;
+        color: #ff0000;
+    }
+    .product {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+    }
+    .product img {
+        width: 100px;
+        height: auto;
+    }
+    .info {
+        flex: 1;
+        padding: 0 20px;
+    }
+    .buy-button {
+        background-color: #ff4500;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+    }
+    .notification {
+        color: #00b300;
+        font-weight: bold;
+        margin-top: 20px;
+        text-align: center;
     }
 </style>
 </head>
 <body>
 
+<h1>激安！ブランド品 100円 セール</h1>
+
+<div id="products"></div>
+<div class="notification" id="notification"></div>
+
 <script>
-    const names = [
-        "こうへい", "たつや", "りょうすけ", "ゆうた", "なおき",
-        "のぞむ", "こうすけ", "るい", "ゆうり", "ひろふみ",
-        "まこと", "けいた", "たから", "けいじろう", "ともひろ",
-        "とおる", "ゆうすけ", "しょうき", "ひろのり", "だいき",
-        "こうよう", "まもる", "つばき", "ひかる", "たいき",
-        "こうや", "ゆう", "だいすけ", "ゆうた", "ゆうと",
-        "ゆうたろう", "しょうた", "しょうた", "だいき", "としや"
+    const products = [
+        { name: "Gucci バッグ", price: 100, stock: 10, image: "https://via.placeholder.com/100" },
+        { name: "Chanel コスメセット", price: 100, stock: 8, image: "https://via.placeholder.com/100" },
+        { name: "Louis Vuitton 財布", price: 100, stock: 5, image: "https://via.placeholder.com/100" },
+        { name: "Hermès スカーフ", price: 100, stock: 7, image: "https://via.placeholder.com/100" },
+        { name: "Dior 香水", price: 100, stock: 12, image: "https://via.placeholder.com/100" }
     ];
 
-    const body = document.body;
+    const initials = ["A", "K", "S", "T", "N", "H", "M", "Y", "R", "W"];
+    const productContainer = document.getElementById('products');
+    const notificationElement = document.getElementById('notification');
 
-    // 名前要素を作成し、ランダムな位置と設定を付与
-    const nameElements = names.map((name, index) => {
-        const element = document.createElement('div');
-        element.textContent = name;
-        element.classList.add('name');
-        body.appendChild(element);
-
-        // ランダムな初期設定
-        return {
-            element,
-            angle: Math.random() * 360,
-            radius: Math.random() * 300 + 50, // 半径 50～350px
-            speed: Math.random() * 6 - 3 // 回転速度 -3 ～ 3
-        };
+    // ローカルストレージから在庫を読み込み
+    products.forEach((product, index) => {
+        const storedStock = localStorage.getItem(`stock-${index}`);
+        if (storedStock !== null) {
+            product.stock = parseInt(storedStock, 10);
+        }
     });
 
-    function animate() {
-        nameElements.forEach((name) => {
-            // ランダムな速度で回転
-            name.angle += name.speed;
-            const radian = (name.angle * Math.PI) / 180;
-            const x = window.innerWidth / 2 + Math.cos(radian) * name.radius;
-            const y = window.innerHeight / 2 + Math.sin(radian) * name.radius;
-
-            name.element.style.left = `${x}px`;
-            name.element.style.top = `${y}px`;
+    // 商品を表示
+    function displayProducts() {
+        productContainer.innerHTML = '';
+        products.forEach((product, index) => {
+            const productElement = document.createElement('div');
+            productElement.classList.add('product');
+            productElement.innerHTML = `
+                <img src="${product.image}" alt="${product.name}">
+                <div class="info">
+                    <h2>${product.name}</h2>
+                    <p>価格: ¥${product.price}</p>
+                    <p>在庫: <span id="stock-${index}">${product.stock}</span></p>
+                </div>
+                <button class="buy-button" onclick="buyProduct(${index})">購入する</button>
+            `;
+            productContainer.appendChild(productElement);
         });
-
-        requestAnimationFrame(animate);
     }
 
-    animate();
+    // 在庫を減らす関数
+    function buyProduct(index) {
+        if (products[index].stock > 0) {
+            products[index].stock--;
+            localStorage.setItem(`stock-${index}`, products[index].stock);
+            displayProducts();
+            window.location.href = "https://inaijhs95.my.canva.site/secret2025";
+        }
+    }
+
+    // 購入速報を表示する関数
+    function showNotification() {
+        const initial = initials[Math.floor(Math.random() * initials.length)];
+        const lastName = "さん";
+        const product = products[Math.floor(Math.random() * products.length)];
+        if (product.stock > 0) {
+            notificationElement.textContent = `${initial}${lastName}が${product.name}を購入しました！`;
+        }
+    }
+
+    // リアルタイムで購入速報を更新
+    setInterval(showNotification, 2800);
+
+    // 初期表示
+    displayProducts();
 </script>
 
 </body>
