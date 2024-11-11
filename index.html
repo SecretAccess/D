@@ -30,8 +30,8 @@
         padding: 10px 0;
     }
     .product img {
-        width: 100px;
-        height: 100px;
+        width: 50px; /* 画像サイズを小さく調整 */
+        height: 50px;
         margin-right: 20px;
         border: 2px solid #d32f2f;
     }
@@ -45,6 +45,7 @@
         border: none;
         cursor: pointer;
         animation: pulse 1.5s infinite;
+        font-size: 0.9em;
     }
     @keyframes pulse {
         0%, 100% { transform: scale(1); }
@@ -67,14 +68,14 @@
 
 <script>
     const products = [
-        { name: "Gucci バッグ", price: 100, stock: 10, image: "https://via.placeholder.com/100" },
-        { name: "Chanel コスメセット", price: 100, stock: 8, image: "https://via.placeholder.com/100" },
-        { name: "Louis Vuitton 財布", price: 100, stock: 5, image: "https://via.placeholder.com/100" },
-        { name: "Hermès スカーフ", price: 100, stock: 7, image: "https://via.placeholder.com/100" },
-        { name: "Dior 香水", price: 100, stock: 12, image: "https://via.placeholder.com/100" }
+        { name: "Gucci バッグ", price: 100, stock: 10, image: "A.png" },
+        { name: "Chanel コスメセット", price: 100, stock: 8, image: "A.png" },
+        { name: "Louis Vuitton 財布", price: 100, stock: 5, image: "A.png" },
+        { name: "Hermès スカーフ", price: 100, stock: 7, image: "A.png" },
+        { name: "Dior 香水", price: 100, stock: 12, image: "A.png" }
     ];
 
-    const initials = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const initials = "AEHIKMNORSTUWY";
     const productContainer = document.getElementById('products');
     const notificationElement = document.getElementById('notification');
 
