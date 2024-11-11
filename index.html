@@ -16,7 +16,7 @@
     }
     .name {
         position: absolute;
-        font-size: 2em;
+        font-size: 1.5em;
         color: #00ff00;
         white-space: nowrap;
         transform-origin: center;
@@ -25,22 +25,39 @@
 </head>
 <body>
 
-<div class="name" id="name1">こうへい</div>
-<div class="name" id="name2">たつや</div>
-<div class="name" id="name3">りょうすけ</div>
-<div class="name" id="name4">ゆうた</div>
-
 <script>
     const names = [
-        { element: document.getElementById('name1'), angle: 0, radius: 100 },
-        { element: document.getElementById('name2'), angle: 90, radius: 150 },
-        { element: document.getElementById('name3'), angle: 180, radius: 200 },
-        { element: document.getElementById('name4'), angle: 270, radius: 250 }
+        "こうへい", "たつや", "りょうすけ", "ゆうた", "なおき",
+        "のぞむ", "こうすけ", "るい", "ゆうり", "ひろふみ",
+        "まこと", "けいた", "たから", "けいじろう", "ともひろ",
+        "とおる", "ゆうすけ", "しょうき", "ひろのり", "だいき",
+        "こうよう", "まもる", "つばき", "ひかる", "たいき",
+        "こうや", "ゆう", "だいすけ", "ゆうた", "ゆうと",
+        "ゆうたろう", "しょうた", "しょうた", "だいき", "としや"
     ];
 
+    const body = document.body;
+
+    // 名前要素を作成し、ランダムな位置と設定を付与
+    const nameElements = names.map((name, index) => {
+        const element = document.createElement('div');
+        element.textContent = name;
+        element.classList.add('name');
+        body.appendChild(element);
+
+        // ランダムな初期設定
+        return {
+            element,
+            angle: Math.random() * 360,
+            radius: Math.random() * 300 + 50, // 半径 50～350px
+            speed: Math.random() * 6 - 3 // 回転速度 -3 ～ 3
+        };
+    });
+
     function animate() {
-        names.forEach((name, index) => {
-            name.angle += 2; // 回転の速度を調整（数字を大きくすると速くなる）
+        nameElements.forEach((name) => {
+            // ランダムな速度で回転
+            name.angle += name.speed;
             const radian = (name.angle * Math.PI) / 180;
             const x = window.innerWidth / 2 + Math.cos(radian) * name.radius;
             const y = window.innerHeight / 2 + Math.sin(radian) * name.radius;
