@@ -1,115 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>System Error Notification</title>
+<title>渦巻く名前のサイト</title>
 <style>
     body {
         background-color: #000;
-        color: #00ff00;
-        font-family: 'Courier New', Courier, monospace;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        height: 100vh;
-        padding: 20px;
         overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
     }
-    .message {
-        font-size: 1.2em;
-        line-height: 1.5;
-        white-space: pre-wrap;
-        width: 100%;
-        max-width: 600px;
-    }
-    @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
-    }
-    .cursor {
-        display: inline-block;
-        width: 10px;
-        background-color: #00ff00;
-        animation: blink 0.5s infinite;
+    .name {
+        position: absolute;
+        font-size: 2em;
+        color: #00ff00;
+        white-space: nowrap;
+        transform-origin: center;
     }
 </style>
 </head>
 <body>
 
-<div class="message" id="message"></div>
-<div class="cursor"></div>
+<div class="name" id="name1">こうへい</div>
+<div class="name" id="name2">たつや</div>
+<div class="name" id="name3">りょうすけ</div>
+<div class="name" id="name4">ゆうた</div>
 
 <script>
-    const messages = [
-        "Personal info leaked: Name, age, address",
-        "Detected IP: 192.168.1.1",
-        "Credit card number found: **** **** **** 5619",
-        "Accessing photo album... Found 2,342 photos",
-        "Email contents are being read",
-        "Browsing history: Top 10 visited sites",
-        "Detected: Recent searches - 'How to hide money'",
-        "Leaking contact list (230 contacts)",
-        "Access to WhatsApp messages: 1,239 chats",
-        "Location tracking activated",
-        "Found passwords: Gmail, Facebook, Instagram",
-        "Searching phone storage... Found secret folder",
-        "Camera activated... Capturing front camera",
-        "Microphone activated... Recording audio",
-        "Detected connected devices: 5 devices",
-        "Bluetooth access: Syncing data from nearby devices",
-        "Uploading all local files to server",
-        "Accessing clipboard data: Copied text found",
-        "Searching bank account details...",
-        "Found recent bank transactions",
-        "Tracking app usage: High usage of social media",
-        "VPN disconnected. IP exposed",
-        "Streaming video from gallery... Complete",
-        "Detected dark web searches: 'Buy fake ID'",
-        "Phone number leaked: +81 0*0-****-****",
-        "Complete access to SMS messages",
-        "Detected attempts to delete files",
-        "Accessing cloud storage... Downloading",
-        "Contacting all connected devices",
-        "Live screen recording started",
-        "Data collection: 100% complete. Uploading"
+    const names = [
+        { element: document.getElementById('name1'), angle: 0, radius: 100 },
+        { element: document.getElementById('name2'), angle: 90, radius: 150 },
+        { element: document.getElementById('name3'), angle: 180, radius: 200 },
+        { element: document.getElementById('name4'), angle: 270, radius: 250 }
     ];
 
-    const messageElement = document.getElementById('message');
-    let messageIndex = 0;
-    let charIndex = 0;
-    const typingSpeed = 10; // 高速表示
-    const messageDelay = 100; // メッセージ切り替えの遅延時間
+    function animate() {
+        names.forEach((name, index) => {
+            name.angle += 2; // 回転の速度を調整（数字を大きくすると速くなる）
+            const radian = (name.angle * Math.PI) / 180;
+            const x = window.innerWidth / 2 + Math.cos(radian) * name.radius;
+            const y = window.innerHeight / 2 + Math.sin(radian) * name.radius;
 
-    function typeMessage() {
-        if (messageIndex < messages.length) {
-            if (charIndex < messages[messageIndex].length) {
-                messageElement.textContent += messages[messageIndex].charAt(charIndex);
-                charIndex++;
-                setTimeout(typeMessage, typingSpeed);
-            } else {
-                messageElement.textContent += "\n";
-                charIndex = 0;
-                messageIndex++;
-                setTimeout(() => {
-                    window.scrollTo(0, document.body.scrollHeight);
-                    typeMessage();
-                }, messageDelay);
-            }
-        } else {
-            showCompletionPopup();
-        }
+            name.element.style.left = `${x}px`;
+            name.element.style.top = `${y}px`;
+        });
+
+        requestAnimationFrame(animate);
     }
 
-    function showCompletionPopup() {
-        setTimeout(() => {
-            alert("Data leak complete. Redirecting now...");
-            window.location.href = "https://inaijhs95.my.canva.site/secret2025";
-        }, 500);
-    }
-
-    typeMessage();
+    animate();
 </script>
 
 </body>
