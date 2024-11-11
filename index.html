@@ -7,104 +7,90 @@
 <style>
     body {
         background-color: #000;
-        color: #ff0000;
+        color: #00ff00;
         font-family: 'Courier New', Courier, monospace;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         height: 100vh;
-        text-align: center;
+        padding: 20px;
         overflow: hidden;
     }
-    h1 {
-        font-size: 2em;
-        margin-bottom: 20px;
-    }
-    p {
+    .message {
         font-size: 1.2em;
-        margin: 10px 0;
-        opacity: 0;
-        animation: fadeIn 2s forwards;
+        line-height: 1.5;
+        text-align: left;
+        width: 100%;
+        max-width: 600px;
+        white-space: pre-wrap;
     }
-    .alert {
-        color: #ff4500;
-        font-weight: bold;
-        font-size: 1.5em;
-        animation: shake 0.5s infinite;
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
     }
-    @keyframes fadeIn {
-        to {
-            opacity: 1;
-        }
-    }
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-10px); }
-        50% { transform: translateX(10px); }
-        75% { transform: translateX(-10px); }
+    .cursor {
+        display: inline-block;
+        width: 10px;
+        background-color: #00ff00;
+        animation: blink 0.8s infinite;
     }
 </style>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const messages = [
-            "個人情報が流出しました。",
-            "Personal information has been leaked.",
-            "개인 정보가 유출되었습니다.",
-            "个人信息已泄露。",
-            "تم تسريب المعلومات الشخصية.",
-            "IPアドレス: 192.168.1.1 が確認されました。",
-            "IP address 192.168.1.1 has been detected.",
-            "IP 주소 192.168.1.1이 감지되었습니다.",
-            "检测到 IP 地址 192.168.1.1。",
-            "تم الكشف عن عنوان IP: 192.168.1.1.",
-            "クレジットカード情報が漏洩しました。",
-            "Credit card information has been compromised.",
-            "신용카드 정보가 유출되었습니다.",
-            "信用卡信息已泄露。",
-            "تم تسريب معلومات بطاقة الائتمان.",
-            "LINEメッセージの内容が漏洩しました。",
-            "Contents of LINE messages have been leaked.",
-            "LINE 메시지 내용이 유출되었습니다.",
-            "LINE 消息内容已泄露。",
-            "تم تسريب محتوى رسائل LINE.",
-            "写真アルバムへのアクセスが確認されました。",
-            "Access to photo album has been confirmed.",
-            "사진 앨범에 대한 액세스가 확인되었습니다.",
-            "已确认访问相册。",
-            "تم تأكيد الوصول إلى ألبوم الصور.",
-            "ログイン情報が流出しました。",
-            "Login credentials have been leaked.",
-            "로그인 정보가 유출되었습니다.",
-            "登录凭据已泄露。",
-            "تم تسريب بيانات تسجيل الدخول."
-        ];
-
-        let index = 0;
-
-        function showNextMessage() {
-            if (index < messages.length) {
-                const p = document.createElement('p');
-                p.textContent = messages[index];
-                document.body.appendChild(p);
-                index++;
-                setTimeout(showNextMessage, 1500);
-            } else {
-                const alertMessage = document.createElement('p');
-                alertMessage.textContent = "全ての情報が漏洩しました。All data has been leaked.";
-                alertMessage.classList.add('alert');
-                document.body.appendChild(alertMessage);
-            }
-        }
-
-        showNextMessage();
-    });
-</script>
 </head>
 <body>
 
-<h1>システムエラー通知 / System Error Notification</h1>
-<p>アクセス中に重大な問題が発生しました</p>
+<div class="message" id="message"></div>
+<div class="cursor"></div>
+
+<script>
+    const messages = [
+        "システムエラーが発生しました...",
+        "個人情報が流出しています...",
+        "Personal information has been leaked...",
+        "개인 정보가 유출되고 있습니다...",
+        "个人信息正在泄露...",
+        "تم تسريب المعلومات الشخصية...",
+        "IPアドレス: 192.168.1.1 が検出されました。",
+        "IP address 192.168.1.1 detected.",
+        "로그인 정보가 유출되었습니다...",
+        "Login credentials compromised...",
+        "登录凭据已被泄露...",
+        "تم تسريب بيانات تسجيل الدخول...",
+        "クレジットカード情報が確認されました。",
+        "Credit card information detected...",
+        "신용카드 정보가 확인되었습니다...",
+        "信用卡信息已被确认...",
+        "تم تأكيد معلومات بطاقة الائتمان...",
+        "写真アルバムへのアクセスが確認されました。",
+        "Access to photo albums detected...",
+        "사진 앨범에 대한 액세스가 확인되었습니다...",
+        "相册访问已被确认...",
+        "تم تأكيد الوصول إلى ألبوم الصور...",
+        "全ての情報が漏洩しました。All data has been leaked."
+    ];
+
+    const messageElement = document.getElementById('message');
+    let messageIndex = 0;
+    let charIndex = 0;
+    let typingSpeed = 50;
+
+    function typeMessage() {
+        if (messageIndex < messages.length) {
+            if (charIndex < messages[messageIndex].length) {
+                messageElement.textContent += messages[messageIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(typeMessage, typingSpeed);
+            } else {
+                messageElement.textContent += "\n";
+                charIndex = 0;
+                messageIndex++;
+                setTimeout(typeMessage, 300);
+            }
+        }
+    }
+
+    typeMessage();
+</script>
 
 </body>
 </html>
