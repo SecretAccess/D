@@ -3,62 +3,83 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>逃げ回るリンク - スマホ向け</title>
+<title>重要な通知</title>
 <style>
     body {
+        background-color: #000;
+        color: #ff0000;
+        font-family: 'Courier New', Courier, monospace;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
+        justify-content: center;
         height: 100vh;
-        background-color: #f0f8ff;
-        font-family: Arial, sans-serif;
-        overflow: hidden;
-        position: relative;
-    }
-    .moving-link {
-        font-size: 1.2em;
-        color: #007bff;
-        text-decoration: underline;
-        position: absolute;
-        cursor: pointer;
-        transition: transform 0.2s;
-        max-width: 80%;
         text-align: center;
     }
-    .moving-link:hover {
-        transform: scale(1.2);
+    h1 {
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+    p {
+        font-size: 1.2em;
+        margin: 10px 0;
+        opacity: 0;
+        animation: fadeIn 2s forwards;
+    }
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+    .alert {
+        color: #ff4500;
+        font-weight: bold;
+        font-size: 1.5em;
+        animation: shake 0.5s infinite;
+    }
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        50% { transform: translateX(10px); }
+        75% { transform: translateX(-10px); }
     }
 </style>
 <script>
-    const link = document.querySelector('.moving-link');
+    document.addEventListener('DOMContentLoaded', () => {
+        const messages = [
+            "⚠️ 個人情報が流出しました。",
+            "⚠️ IPアドレス: 192.168.1.1",
+            "⚠️ クレジットカード情報が見つかりました。",
+            "⚠️ LINEメッセージの内容が漏洩しました。",
+            "⚠️ 写真アルバムへのアクセスが確認されました。",
+            "⚠️ ログイン情報が流出しました。"
+        ];
 
-    function moveLink() {
-        const x = Math.random() * (window.innerWidth - 150);
-        const y = Math.random() * (window.innerHeight - 100);
-        link.style.left = `${x}px`;
-        link.style.top = `${y}px`;
-    }
+        let index = 0;
 
-    document.addEventListener('touchmove', (e) => {
-        const touch = e.touches[0];
-        const linkRect = link.getBoundingClientRect();
-        const distanceX = Math.abs(touch.clientX - (linkRect.left + linkRect.width / 2));
-        const distanceY = Math.abs(touch.clientY - (linkRect.top + linkRect.height / 2));
-
-        if (distanceX < 100 && distanceY < 50) {
-            moveLink();
+        function showNextMessage() {
+            if (index < messages.length) {
+                const p = document.createElement('p');
+                p.textContent = messages[index];
+                document.body.appendChild(p);
+                index++;
+                setTimeout(showNextMessage, 2000);
+            } else {
+                const alertMessage = document.createElement('p');
+                alertMessage.textContent = "全ての情報が漏洩しました。";
+                alertMessage.classList.add('alert');
+                document.body.appendChild(alertMessage);
+            }
         }
-    });
 
-    link.addEventListener('click', () => {
-        alert('よく捕まえました！リンク先へ移動します。');
-        window.location.href = "https://line.me/R/oaMessage/%40778unfqy/%E3%83%A2%E3%83%BC%E3%83%AB%E3%82%B9%E4%BF%A1%E5%8F%B7%E3%80%81%E8%A7%A3%E8%AA%AD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81";
+        showNextMessage();
     });
 </script>
 </head>
 <body>
 
-<a class="moving-link">▶ こちらのリンクをタップして秘密を発見する</a>
+<h1>システムエラー通知</h1>
+<p>アクセス中に問題が発生しました...</p>
 
 </body>
 </html>
