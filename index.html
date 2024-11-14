@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>難問クイズチャレンジ</title>
+    <title>牛の難問クイズチャレンジ</title>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background-color: #fff;
+            background-image: url('https://source.unsplash.com/1600x900/?cow');
+            background-size: cover;
             text-align: center;
             padding: 20px;
+            color: #333;
         }
         .hidden {
             display: none;
@@ -17,20 +21,61 @@
         #quiz-container {
             max-width: 500px;
             margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #4c4c4c;
         }
         button {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 15px;
+            font-size: 18px;
             margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            background-color: #444;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
         }
         .question {
             margin: 20px 0;
+        }
+        .answer {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 15px;
+            background-color: #f2f2f2;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .answer:hover {
+            background-color: #dcdcdc;
+        }
+        #loading img {
+            width: 100px;
+            animation: walk 1s infinite alternate;
+        }
+        @keyframes walk {
+            0% { transform: translateX(-10px); }
+            100% { transform: translateX(10px); }
         }
     </style>
 </head>
 <body>
     <div id="quiz-container">
-        <h1>正解率1%!? <br>難問クイズに挑戦！</h1>
+        <h1>🐮 正解率1%!? 牛の難問クイズ 🐮</h1>
         <button id="start-quiz">スタート</button>
 
         <div id="question-1" class="question hidden">
@@ -50,7 +95,7 @@
         </div>
 
         <div id="question-3" class="question hidden">
-            <h2>問題3: 飼育している牛が耳につけている【耳標（じひょう）】は何のために付けられている？</h2>
+            <h2>問題3: 耳標は何のために付けられている？</h2>
             <button class="answer" data-correct="true">A. 個体識別</button>
             <button class="answer" data-correct="false">B. 体温測定</button>
             <button class="answer" data-correct="false">C. GPS管理</button>
@@ -64,6 +109,7 @@
         </div>
 
         <div id="loading" class="hidden">
+            <img src="https://source.unsplash.com/100x100/?cow" alt="Cow">
             <p>ローディング中...</p>
         </div>
 
@@ -73,7 +119,7 @@
         </div>
 
         <div id="announcement" class="hidden">
-            <h2>2025年6月に理奈の第二子が生まれます！</h2>
+            <h2>🎉 2025年6月に理奈の第二子が生まれます！🎉</h2>
         </div>
     </div>
 
@@ -85,28 +131,23 @@
             showQuestion(currentQuestion);
         });
 
-        const answers = document.querySelectorAll(".answer");
-        answers.forEach(button => {
+        document.querySelectorAll(".answer").forEach(button => {
             button.addEventListener("click", (event) => {
                 const isCorrect = event.target.getAttribute("data-correct") === "true";
                 if (isCorrect) {
                     currentQuestion++;
-                    if (currentQuestion > 3) {
-                        showResult();
-                    } else {
-                        showQuestion(currentQuestion);
-                    }
+                    currentQuestion > 3 ? showResult() : showQuestion(currentQuestion);
                 } else {
-                    alert("不正解です。再挑戦してください。");
+                    alert("不正解です。最初からやり直しです。");
                     currentQuestion = 1;
                     showQuestion(currentQuestion);
                 }
             });
         });
 
-        function showQuestion(questionNumber) {
+        function showQuestion(number) {
             document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
-            document.getElementById(`question-${questionNumber}`).classList.remove("hidden");
+            document.getElementById(`question-${number}`).classList.remove("hidden");
         }
 
         function showResult() {
@@ -114,23 +155,19 @@
             document.getElementById("result").classList.remove("hidden");
         }
 
-        document.getElementById("claim-prize").addEventListener("click", showLoading);
-        document.getElementById("reveal-prize").addEventListener("click", revealPrize);
-
-        function showLoading() {
+        document.getElementById("claim-prize").addEventListener("click", () => {
             document.getElementById("result").classList.add("hidden");
             document.getElementById("loading").classList.remove("hidden");
-
             setTimeout(() => {
                 document.getElementById("loading").classList.add("hidden");
                 document.getElementById("final-message").classList.remove("hidden");
             }, 3000);
-        }
+        });
 
-        function revealPrize() {
+        document.getElementById("reveal-prize").addEventListener("click", () => {
             document.getElementById("final-message").classList.add("hidden");
             document.getElementById("announcement").classList.remove("hidden");
-        }
+        });
     </script>
 </body>
 </html>
