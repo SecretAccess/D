@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>難問パズルゲーム</title>
+    <title>難問クイズチャレンジ</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +14,7 @@
         .hidden {
             display: none;
         }
-        #game-container {
+        #quiz-container {
             max-width: 500px;
             margin: 0 auto;
         }
@@ -23,137 +23,94 @@
             font-size: 16px;
             margin: 10px 0;
         }
-        #puzzle1-grid, #puzzle2-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+        .question {
             margin: 20px 0;
-        }
-        .grid-item {
-            background-color: #ccc;
-            padding: 20px;
-            cursor: pointer;
-            user-select: none;
         }
     </style>
 </head>
 <body>
-    <div id="game-container">
-        <h1>正解率1%の難問パズルに挑戦！</h1>
-        <button id="start-button">スタート</button>
-        <div id="puzzle-1" class="puzzle hidden">
-            <h2>問題1: 以下の順に並び替えてください</h2>
-            <div id="puzzle1-grid"></div>
-            <button id="check-answer1">回答する</button>
+    <div id="quiz-container">
+        <h1>正解率1%!? <br>難問クイズに挑戦！</h1>
+        <button id="start-quiz">スタート</button>
+
+        <div id="question-1" class="question hidden">
+            <h2>問題1: 牛が1日に分泌する唾液の量はどれくらい？</h2>
+            <button class="answer" data-correct="false">A. 唾液はでない</button>
+            <button class="answer" data-correct="false">B. 約１リットル</button>
+            <button class="answer" data-correct="true">C. 約２００リットル</button>
+            <button class="answer" data-correct="false">D. 約１００００リットル</button>
         </div>
-        <div id="puzzle-2" class="puzzle hidden">
-            <h2>問題2: 以下の順に並び替えてください</h2>
-            <div id="puzzle2-grid"></div>
-            <button id="check-answer2">回答する</button>
+
+        <div id="question-2" class="question hidden">
+            <h2>問題2: 牛の胃袋はいくつある？</h2>
+            <button class="answer" data-correct="false">A. １つ</button>
+            <button class="answer" data-correct="false">B. ２つ</button>
+            <button class="answer" data-correct="true">C. ４つ</button>
+            <button class="answer" data-correct="false">D. 胃袋は存在しない</button>
         </div>
+
+        <div id="question-3" class="question hidden">
+            <h2>問題3: 飼育している牛が耳につけている【耳標（じひょう）】は何のために付けられている？</h2>
+            <button class="answer" data-correct="true">A. 個体識別</button>
+            <button class="answer" data-correct="false">B. 体温測定</button>
+            <button class="answer" data-correct="false">C. GPS管理</button>
+            <button class="answer" data-correct="false">D. おしゃれ</button>
+        </div>
+
         <div id="result" class="hidden">
             <h2>おめでとうございます！</h2>
-            <p>解けたあなたに素敵なプレゼント</p>
+            <p>全問正解です！素敵なプレゼントをご用意しました。</p>
             <button id="claim-prize">【受け取る】</button>
         </div>
+
         <div id="loading" class="hidden">
             <p>ローディング中...</p>
         </div>
+
         <div id="final-message" class="hidden">
             <h2>西條利幸様へのプレゼントが決まりました。</h2>
             <button id="reveal-prize">【確認する】</button>
         </div>
+
         <div id="announcement" class="hidden">
             <h2>2025年6月に理奈の第二子が生まれます！</h2>
         </div>
     </div>
 
     <script>
-        document.getElementById("start-button").addEventListener("click", startGame);
+        let currentQuestion = 1;
 
-        function startGame() {
-            document.getElementById("start-button").classList.add("hidden");
-            showPuzzle1();
-        }
-
-        // パズル1の設定
-        const puzzle1Items = ["A", "B", "C", "D"];
-        shuffleArray(puzzle1Items);
-        const puzzle1Grid = document.getElementById("puzzle1-grid");
-        puzzle1Items.forEach(item => {
-            const div = document.createElement("div");
-            div.textContent = item;
-            div.classList.add("grid-item");
-            div.setAttribute("draggable", "true");
-            div.addEventListener("dragstart", dragStart);
-            div.addEventListener("dragover", dragOver);
-            div.addEventListener("drop", drop);
-            puzzle1Grid.appendChild(div);
+        document.getElementById("start-quiz").addEventListener("click", () => {
+            document.getElementById("start-quiz").classList.add("hidden");
+            showQuestion(currentQuestion);
         });
 
-        let dragSource = null;
-
-        function dragStart(event) {
-            dragSource = event.target;
-        }
-
-        function dragOver(event) {
-            event.preventDefault();
-        }
-
-        function drop(event) {
-            if (dragSource && dragSource !== event.target) {
-                const temp = dragSource.textContent;
-                dragSource.textContent = event.target.textContent;
-                event.target.textContent = temp;
-            }
-        }
-
-        document.getElementById("check-answer1").addEventListener("click", checkAnswer1);
-
-        function checkAnswer1() {
-            const currentOrder = Array.from(puzzle1Grid.children).map(div => div.textContent);
-            if (JSON.stringify(currentOrder) === JSON.stringify(["A", "B", "C", "D"])) {
-                alert("正解です！");
-                showPuzzle2();
-            } else {
-                alert("不正解です。再挑戦してください。");
-            }
-        }
-
-        // パズル2の設定
-        const puzzle2Items = ["1", "2", "3", "4"];
-        shuffleArray(puzzle2Items);
-        const puzzle2Grid = document.getElementById("puzzle2-grid");
-        puzzle2Items.forEach(item => {
-            const div = document.createElement("div");
-            div.textContent = item;
-            div.classList.add("grid-item");
-            puzzle2Grid.appendChild(div);
+        const answers = document.querySelectorAll(".answer");
+        answers.forEach(button => {
+            button.addEventListener("click", (event) => {
+                const isCorrect = event.target.getAttribute("data-correct") === "true";
+                if (isCorrect) {
+                    currentQuestion++;
+                    if (currentQuestion > 3) {
+                        showResult();
+                    } else {
+                        showQuestion(currentQuestion);
+                    }
+                } else {
+                    alert("不正解です。再挑戦してください。");
+                    currentQuestion = 1;
+                    showQuestion(currentQuestion);
+                }
+            });
         });
 
-        document.getElementById("check-answer2").addEventListener("click", checkAnswer2);
-
-        function checkAnswer2() {
-            const currentOrder = Array.from(puzzle2Grid.children).map(div => div.textContent);
-            if (JSON.stringify(currentOrder) === JSON.stringify(["1", "2", "3", "4"])) {
-                showResult();
-            } else {
-                alert("不正解です。再挑戦してください。");
-            }
-        }
-
-        function showPuzzle1() {
-            document.getElementById("puzzle-1").classList.remove("hidden");
-        }
-
-        function showPuzzle2() {
-            document.getElementById("puzzle-1").classList.add("hidden");
-            document.getElementById("puzzle-2").classList.remove("hidden");
+        function showQuestion(questionNumber) {
+            document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
+            document.getElementById(`question-${questionNumber}`).classList.remove("hidden");
         }
 
         function showResult() {
-            document.getElementById("puzzle-2").classList.add("hidden");
+            document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
             document.getElementById("result").classList.remove("hidden");
         }
 
@@ -173,14 +130,6 @@
         function revealPrize() {
             document.getElementById("final-message").classList.add("hidden");
             document.getElementById("announcement").classList.remove("hidden");
-        }
-
-        // 配列をシャッフルする関数
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
         }
     </script>
 </body>
