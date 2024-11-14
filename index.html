@@ -141,49 +141,61 @@
     </div>
 
     <script>
-        let currentQuestion = 1;
+        document.addEventListener("DOMContentLoaded", () => {
+            let currentQuestion = 1;
 
-        document.getElementById("start-quiz").addEventListener("click", () => {
-            document.getElementById("start-quiz").classList.add("hidden");
-            showQuestion(currentQuestion);
-        });
-
-        document.querySelectorAll(".answer").forEach(button => {
-            button.addEventListener("click", (event) => {
-                const isCorrect = event.target.getAttribute("data-correct") === "true";
-                if (isCorrect) {
-                    currentQuestion++;
-                    currentQuestion > 3 ? showResult() : showQuestion(currentQuestion);
-                } else {
-                    alert("不正解です。最初からやり直しです。");
-                    currentQuestion = 1;
-                    showQuestion(currentQuestion);
-                }
+            document.getElementById("start-quiz").addEventListener("click", () => {
+                document.getElementById("start-quiz").classList.add("hidden");
+                showQuestion(currentQuestion);
             });
-        });
 
-        document.getElementById("claim-prize").addEventListener("click", () => {
-            document.getElementById("result").classList.add("hidden");
-            document.getElementById("message-1").classList.remove("hidden");
-        });
+            document.querySelectorAll(".answer").forEach(button => {
+                button.addEventListener("click", (event) => {
+                    const isCorrect = event.target.getAttribute("data-correct") === "true";
+                    if (isCorrect) {
+                        currentQuestion++;
+                        currentQuestion > 3 ? showResult() : showQuestion(currentQuestion);
+                    } else {
+                        alert("不正解です。最初からやり直しです。");
+                        currentQuestion = 1;
+                        showQuestion(currentQuestion);
+                    }
+                });
+            });
 
-        document.getElementById("confirm-1").addEventListener("click", () => {
-            document.getElementById("message-1").classList.add("hidden");
-            document.getElementById("message-2").classList.remove("hidden");
-        });
+            document.getElementById("claim-prize").addEventListener("click", () => {
+                document.getElementById("result").classList.add("hidden");
+                document.getElementById("message-1").classList.remove("hidden");
+            });
 
-        document.getElementById("confirm-2").addEventListener("click", () => {
-            document.getElementById("message-2").classList.add("hidden");
-            document.getElementById("loading").classList.remove("hidden");
-            setTimeout(() => {
-                document.getElementById("loading").classList.add("hidden");
-                document.getElementById("final-message").classList.remove("hidden");
-            }, 3000);
-        });
+            document.getElementById("confirm-1").addEventListener("click", () => {
+                document.getElementById("message-1").classList.add("hidden");
+                document.getElementById("message-2").classList.remove("hidden");
+            });
 
-        document.getElementById("reveal-prize").addEventListener("click", () => {
-            document.getElementById("final-message").classList.add("hidden");
-            document.getElementById("announcement").classList.remove("hidden");
+            document.getElementById("confirm-2").addEventListener("click", () => {
+                document.getElementById("message-2").classList.add("hidden");
+                document.getElementById("loading").classList.remove("hidden");
+                setTimeout(() => {
+                    document.getElementById("loading").classList.add("hidden");
+                    document.getElementById("final-message").classList.remove("hidden");
+                }, 3000);
+            });
+
+            document.getElementById("reveal-prize").addEventListener("click", () => {
+                document.getElementById("final-message").classList.add("hidden");
+                document.getElementById("announcement").classList.remove("hidden");
+            });
+
+            function showQuestion(number) {
+                document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
+                document.getElementById(`question-${number}`).classList.remove("hidden");
+            }
+
+            function showResult() {
+                document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
+                document.getElementById("result").classList.remove("hidden");
+            }
         });
     </script>
 </body>
