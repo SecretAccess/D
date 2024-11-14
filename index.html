@@ -68,11 +68,6 @@
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.2s;
-        }
-        .answer:hover {
-            background-color: #e0e0e0;
-            transform: translateY(-2px);
         }
         #loading img {
             width: 80px;
@@ -120,6 +115,16 @@
             <button id="claim-prize">受け取る</button>
         </div>
 
+        <div id="message-1" class="hidden">
+            <p>プレゼントはお選び頂けません。予めご了承ください。</p>
+            <button id="confirm-1">確認しました</button>
+        </div>
+
+        <div id="message-2" class="hidden">
+            <p>プレゼントがお手元に届くのは2025年6月11日頃を予定しております。</p>
+            <button id="confirm-2">確認しました</button>
+        </div>
+
         <div id="loading" class="hidden">
             <img src="USHI.png" alt="Cow">
             <p>ローディング中...</p>
@@ -157,18 +162,18 @@
             });
         });
 
-        function showQuestion(number) {
-            document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
-            document.getElementById(`question-${number}`).classList.remove("hidden");
-        }
-
-        function showResult() {
-            document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
-            document.getElementById("result").classList.remove("hidden");
-        }
-
         document.getElementById("claim-prize").addEventListener("click", () => {
             document.getElementById("result").classList.add("hidden");
+            document.getElementById("message-1").classList.remove("hidden");
+        });
+
+        document.getElementById("confirm-1").addEventListener("click", () => {
+            document.getElementById("message-1").classList.add("hidden");
+            document.getElementById("message-2").classList.remove("hidden");
+        });
+
+        document.getElementById("confirm-2").addEventListener("click", () => {
+            document.getElementById("message-2").classList.add("hidden");
             document.getElementById("loading").classList.remove("hidden");
             setTimeout(() => {
                 document.getElementById("loading").classList.add("hidden");
