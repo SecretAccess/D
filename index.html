@@ -333,11 +333,18 @@
         }
 
         // おめでとうメッセージの表示
-       function showCongratulations() {
+      function showCongratulations() {
     document.getElementById("ranking-display").classList.add("hidden");
     document.getElementById("congratulations").classList.remove("hidden");
     launchConfetti(); // 紙吹雪アニメーションを表示
+
+    // 1秒後に結果画面に遷移
+    setTimeout(() => {
+        document.getElementById("congratulations").classList.add("hidden");
+        showResult();
+    }, 1000);
 }
+
 
 
         // フィードメッセージの更新
