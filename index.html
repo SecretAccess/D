@@ -152,14 +152,7 @@
     animation: bounce 1s infinite;
 }
 
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
+
         /* 新しいクラッカー風紙吹雪 */
 /* クラッカーの紙吹雪アニメーション */
 @keyframes flyLeft {
@@ -182,6 +175,13 @@
         transform: translateX(-100vw) translateY(-100vh) scale(1);
         opacity: 0;
     }
+}
+.confetti {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    opacity: 0.8;
 }
 
 #reveal-prize {
@@ -452,28 +452,24 @@ document.getElementById("reveal-prize").addEventListener("click", () => {
         const confetti = document.createElement("div");
         confetti.classList.add("confetti");
 
-        // 左側から飛ぶ紙吹雪と右側から飛ぶ紙吹雪を分ける
         const isLeft = i % 2 === 0;
-
-        // 横位置を画面の左右に設定
         confetti.style.left = isLeft ? '-5%' : '105%';
-
-        // 縦位置をランダムに設定
         confetti.style.top = `${Math.random() * 100}%`;
-
-        // アニメーションの遅延時間をランダムに設定
         confetti.style.animationDelay = `${Math.random() * 0.5}s`;
 
-        // ピンクと水色のランダムな色を設定
         const colors = ['#ff69b4', '#ff1493', '#00bfff', '#87cefa'];
         confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
 
-        // クラッカー風のアニメーション効果を追加
         confetti.style.animation = isLeft ? 'flyLeft 1.5s forwards' : 'flyRight 1.5s forwards';
-
         confettiContainer.appendChild(confetti);
+
+        // 紙吹雪が終わった後に削除
+        confetti.addEventListener('animationend', () => {
+            confettiContainer.removeChild(confetti);
+        });
     }
 }
+
 
     // フィードメッセージの更新
     const feedMessages = [
