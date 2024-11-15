@@ -138,6 +138,7 @@
 
 <div id="announcement" class="hidden">
     <h2>🎉 2025年6月に理奈の <br>第二子が生まれます！🎉</h2>
+    <div id="confetti-container"></div> <!-- 紙吹雪用のコンテナ -->
 </div>
 
 <script>
@@ -172,6 +173,7 @@
         document.getElementById("reveal-prize").addEventListener("click", () => {
             document.getElementById("final-message").classList.add("hidden");
             document.getElementById("announcement").classList.remove("hidden");
+            launchConfetti(); // 紙吹雪アニメーションを開始
         });
 
         function showQuestion(number) {
@@ -188,11 +190,12 @@
             const prizes = [
                 "世界一周旅行",
                 "現金３０万円",
-                "海鮮セット",
+                "仙台牛５KG",
                 "現金３０万円",
                 "ディズニーペアチケット",
                 "現金３０万円",
                 "仰天!?スクープ情報"
+                "現金３０万円",
             ];
             const prizeText = document.getElementById("prize-text");
             let index = 0;
@@ -202,7 +205,6 @@
                 prizeText.textContent = prizes[index];
                 index = (index + 1) % prizes.length;
 
-                // ループが3回終わったら「仰天!?スクープ情報」で止める
                 if (index === 0) {
                     loopCount++;
                 }
@@ -218,7 +220,18 @@
             }, 150);
         }
 
-        // 点滅アニメーションの追加
+        function launchConfetti() {
+            const confettiContainer = document.getElementById("confetti-container");
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement("div");
+                confetti.classList.add("confetti");
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.animationDelay = `${Math.random() * 2}s`;
+                confettiContainer.appendChild(confetti);
+            }
+        }
+
+        // 紙吹雪のスタイル
         const style = document.createElement("style");
         style.textContent = `
             @keyframes blink {
@@ -226,10 +239,39 @@
                     opacity: 0;
                 }
             }
+            .confetti {
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                background-color: hsl(${Math.random() * 360}, 100%, 50%);
+                opacity: 0.8;
+                animation: fall 3s linear infinite;
+            }
+            @keyframes fall {
+                0% {
+                    transform: translateY(-100vh) rotate(0deg);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(100vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+            #confetti-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                overflow: hidden;
+                z-index: 1000;
+            }
         `;
         document.head.appendChild(style);
     });
 </script>
+
 
 </body>
 </html>
