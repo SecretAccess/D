@@ -415,54 +415,92 @@ let startTime;
 let endTime;
 let userTime;
 
-// クイズ開始時にスタートタイムを記録
-document.getElementById("start-quiz").addEventListener("click", () => {
-    startTime = new Date();
+document.addEventListener("DOMContentLoaded", () => {
+    let currentQuestion = 1;
+    let startTime, endTime, userTime;
+
+    // クイズ開始時にスタートタイムを記録
+    document.getElementById("start-quiz").addEventListener("click", () => {
+        startTime = new Date();
+        document.getElementById("start-quiz").classList.add("hidden");
+        showQuestion(currentQuestion);
+    });
+
+    // 回答ボタンの処理
+    document.querySelectorAll(".answer").forEach(button => {
+        button.addEventListener("click", (event) => {
+            const isCorrect = event.target.getAttribute("data-correct") === "true";
+            if (isCorrect) {
+                currentQuestion++;
+                if (currentQuestion > 3) {
+                    showTime(); // クイズ終了後にタイム計測を表示
+                    showResult();
+                } else {
+                    showQuestion(currentQuestion);
+                }
+            } else {
+                alert("不正解です。最初からやり直しです。");
+                currentQuestion = 1;
+                showQuestion(currentQuestion);
+            }
+        });
+    });
+
+    // クイズ表示切替
+    function showQuestion(number) {
+        document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
+        document.getElementById(`question-${number}`).classList.remove("hidden");
+    }
+
+    // 結果表示とタイム計測
+    function showTime() {
+        endTime = new Date();
+        userTime = ((endTime - startTime) / 1000).toFixed(2);
+        document.getElementById("final-time").textContent = `${userTime}秒`;
+        document.getElementById("time-display").classList.remove("hidden");
+
+        // タイム表示の後、ランキング発表開始
+        setTimeout(startRankingAnimation, 2000);
+    }
+
+    function showResult() {
+        document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
+        document.getElementById("result").classList.remove("hidden");
+    }
+
+    // ランキング発表のアニメーション
+    function startRankingAnimation() {
+        document.getElementById("time-display").classList.add("hidden");
+        document.getElementById("ranking-display").classList.remove("hidden");
+
+        let currentRank = 99999;
+        const rankingElement = document.getElementById("ranking-number");
+
+        const rankingInterval = setInterval(() => {
+            currentRank -= Math.floor(Math.random() * 1000) + 500;
+
+            if (currentRank <= 1) {
+                currentRank = 1;
+                clearInterval(rankingInterval);
+
+                // アニメーション効果を追加して1位表示
+                rankingElement.textContent = "1位";
+                rankingElement.classList.add("animate");
+
+                // おめでとうメッセージの表示
+                setTimeout(showCongratulations, 1000);
+            } else {
+                rankingElement.textContent = `${currentRank}位`;
+            }
+        }, 50);
+    }
+
+    // おめでとうメッセージの表示
+    function showCongratulations() {
+        document.getElementById("ranking-display").classList.add("hidden");
+        document.getElementById("congratulations").classList.remove("hidden");
+    }
 });
-
-// クイズが終了したらタイムを計測して表示
-function showTime() {
-    endTime = new Date();
-    userTime = ((endTime - startTime) / 1000).toFixed(2);
-    document.getElementById("final-time").textContent = `${userTime}秒`;
-    document.getElementById("time-display").classList.remove("hidden");
-
-    // タイム表示の後、ランキング演出を開始
-    setTimeout(startRankingAnimation, 2000);
-}
-
-// ランキング発表のアニメーション
-function startRankingAnimation() {
-    document.getElementById("time-display").classList.add("hidden");
-    document.getElementById("ranking-display").classList.remove("hidden");
-
-    let currentRank = 99999;
-    const rankingElement = document.getElementById("ranking-number");
-
-    const rankingInterval = setInterval(() => {
-        currentRank -= Math.floor(Math.random() * 1000) + 500;
-
-        if (currentRank <= 1) {
-            currentRank = 1;
-            clearInterval(rankingInterval);
-
-            // アニメーション効果を追加して1位表示
-            rankingElement.textContent = "1位";
-            rankingElement.classList.add("animate");
-
-            // おめでとうメッセージの表示
-            setTimeout(showCongratulations, 1000);
-        } else {
-            rankingElement.textContent = `${currentRank}位`;
-        }
-    }, 50);
-}
-
-// おめでとうメッセージの表示
-function showCongratulations() {
-    document.getElementById("ranking-display").classList.add("hidden");
-    document.getElementById("congratulations").classList.remove("hidden");
-}
 
 
     });
