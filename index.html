@@ -95,18 +95,43 @@
 .footer-links a:hover {
     text-decoration: underline;
 }
-        .live-feed {
-    font-size: 14px;
-    color: #555;
+        /* リアルタイム報告セクションのスタイル */
+#live-feed-container {
     margin-top: 20px;
     padding: 10px;
     border-top: 1px solid #ddd;
     background-color: #f9f9f9;
-    overflow: auto; /* 追加 */
-    height: auto; /* 高さを自動にする */
-    max-height: 60px; /* 最大高さを設定（必要に応じて調整） */
-    line-height: 1.5; /* 行の高さを調整 */
-    white-space: nowrap; /* テキストの折り返しを防ぐ */
+}
+
+.feed-title {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+#live-feed {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    height: 30px;
+}
+
+#feed-message {
+    position: absolute;
+    white-space: nowrap;
+    animation: scrollText 15s linear infinite;
+    font-size: 14px;
+    color: #555;
+}
+
+/* テキストが左から右へ流れるアニメーション */
+@keyframes scrollText {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
 }
 
 
@@ -313,15 +338,30 @@
             }
         `;
         document.head.appendChild(style);
-        const users = ["鈴木さん", "佐藤さん", "田中さん", "山本さん", "伊藤さん"];
-const prefectures = ["東京都", "大阪府", "愛知県", "福岡県", "北海道"];
-const actions = [
-    "第1問目に挑戦中です",
-    "第2問目に挑戦中です",
-    "第3問目に挑戦中です",
-    "賞金30万円を獲得しました！",
-    "全問正解しました！"
+        // フィードメッセージのリスト（複数のメッセージを用意）
+const feedMessages = [
+    "11:15:45 - 東京都の鈴木さんが第3問目に挑戦中です。",
+    "11:16:20 - 北海道の田中さんが賞金30万円を獲得しました！",
+    "11:17:05 - 大阪府の佐藤さんが第2問目を突破しました。",
+    "11:18:40 - 福岡県の山本さんが挑戦中です。",
+    "11:19:15 - 愛知県の高橋さんが賞金10万円を獲得しました！"
 ];
+
+let currentIndex = 0;
+const feedMessageElement = document.getElementById("feed-message");
+
+// メッセージを更新する関数
+function updateFeedMessage() {
+    feedMessageElement.textContent = feedMessages[currentIndex];
+    currentIndex = (currentIndex + 1) % feedMessages.length;
+}
+
+// 5秒ごとにメッセージを切り替え
+setInterval(updateFeedMessage, 15000);
+
+// 初期メッセージを設定
+updateFeedMessage();
+
 
 // 現在時刻を取得する関数
 function getCurrentTime() {
@@ -351,8 +391,12 @@ updateLiveFeed();
 
     });
 </script>
-<div id="live-feed" class="live-feed">
-    <p id="feed-message">リアルタイム更新中...</p>
+<!-- リアルタイム報告セクション -->
+<div id="live-feed-container">
+    <h3 class="feed-title">他のユーザーの活躍</h3>
+    <div id="live-feed">
+        <span id="feed-message"></span>
+    </div>
 </div>
 
 
