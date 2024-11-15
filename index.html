@@ -300,7 +300,7 @@
         // プレゼントを高速に表示する
         const selectionInterval = setInterval(() => {
             // リストのアイテムを順番に表示
-            prizeText.textContent = `🎁 ${prizes[index]}が選ばれました！ 🎉`;
+            prizeText.textContent = ` ${prizes[index]}`;
             index = (index + 1) % prizes.length;
 
             // 3周したら抽選終了
