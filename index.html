@@ -188,9 +188,11 @@
             const prizes = [
                 "世界一周旅行",
                 "現金３０万円",
-                "仙台牛５KG",
+                "海鮮セット",
+                "現金３０万円",
                 "ディズニーペアチケット",
-                "どこよりも早い文春砲"
+                "現金３０万円",
+                "仰天!?スクープ情報"
             ];
             const prizeText = document.getElementById("prize-text");
             let index = 0;
@@ -200,13 +202,13 @@
                 prizeText.textContent = prizes[index];
                 index = (index + 1) % prizes.length;
 
-                // ループが3回終わったら「どこよりも早い文春砲」で止める
+                // ループが3回終わったら「仰天!?スクープ情報」で止める
                 if (index === 0) {
                     loopCount++;
                 }
                 if (loopCount >= maxLoops && index === prizes.length - 1) {
                     clearInterval(interval);
-                    prizeText.textContent = "どこよりも早い文春砲";
+                    prizeText.textContent = "仰天!?スクープ情報";
                     prizeText.style.animation = "blink 0.5s step-end infinite";
                     setTimeout(() => {
                         document.getElementById("loading").classList.add("hidden");
