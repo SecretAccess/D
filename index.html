@@ -95,37 +95,37 @@
 .footer-links a:hover {
     text-decoration: underline;
 }
-        /* リアルタイム報告セクションのスタイル */
-#live-feed-container {
-    margin-top: 20px;
+       #feed-container {
+    max-width: 600px;
+    margin: 20px auto;
     padding: 10px;
-    border-top: 1px solid #ddd;
-    background-color: #f9f9f9;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-.feed-title {
-    font-size: 12px;
-    color: #888;
+#feed-title {
+    font-size: 14px;
+    color: #666;
     margin-bottom: 5px;
 }
 
-#live-feed {
-    width: 100%;
-    overflow: hidden;
+#feed-message-wrapper {
     position: relative;
     height: 30px;
+    overflow: hidden;
 }
 
 #feed-message {
     position: absolute;
     white-space: nowrap;
-    animation: scrollText 15s linear infinite;
-    font-size: 14px;
-    color: #555;
+    font-size: 16px;
+    color: #333;
+    animation: scrollMessage 10s linear infinite;
 }
 
-/* テキストが左から右へ流れるアニメーション */
-@keyframes scrollText {
+@keyframes scrollMessage {
     0% {
         transform: translateX(100%);
     }
@@ -133,8 +133,6 @@
         transform: translateX(-100%);
     }
 }
-
-
 
     </style>
 </head>
@@ -338,32 +336,19 @@
             }
         `;
         document.head.appendChild(style);
-        // フィードメッセージのリスト（複数のメッセージを用意）
+       // フィードメッセージのリスト（都道府県とイニシャルの架空のユーザー）
 const feedMessages = [
-    "11:15:45 - 東京都の鈴木さんが第3問目に挑戦中です。",
-    "11:16:20 - 北海道の田中さんが賞金30万円を獲得しました！",
-    "11:17:05 - 大阪府の佐藤さんが第2問目を突破しました。",
-    "11:18:40 - 福岡県の山本さんが挑戦中です。",
-    "11:19:15 - 愛知県の高橋さんが賞金10万円を獲得しました！"
+    "東京都の鈴木さんが第3問目に挑戦中です。",
+    "北海道の田中さんが賞金30万円を獲得しました！",
+    "大阪府の佐藤さんが第2問目を突破しました。",
+    "福岡県の山本さんが挑戦中です。",
+    "愛知県の高橋さんが賞金10万円を獲得しました！"
 ];
 
 let currentIndex = 0;
 const feedMessageElement = document.getElementById("feed-message");
 
-// メッセージを更新する関数
-function updateFeedMessage() {
-    feedMessageElement.textContent = feedMessages[currentIndex];
-    currentIndex = (currentIndex + 1) % feedMessages.length;
-}
-
-// 5秒ごとにメッセージを切り替え
-setInterval(updateFeedMessage, 15000);
-
-// 初期メッセージを設定
-updateFeedMessage();
-
-
-// 現在時刻を取得する関数
+// 現在の時刻を取得してフォーマットする関数
 function getCurrentTime() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
@@ -372,32 +357,30 @@ function getCurrentTime() {
     return `${hours}:${minutes}:${seconds}`;
 }
 
-// ライブフィードを更新する関数
-function updateLiveFeed() {
-    const randomUser = users[Math.floor(Math.random() * users.length)];
-    const randomPrefecture = prefectures[Math.floor(Math.random() * prefectures.length)];
-    const randomAction = actions[Math.floor(Math.random() * actions.length)];
+// メッセージを更新する関数
+function updateFeedMessage() {
     const currentTime = getCurrentTime();
-
-    const feedMessage = `${currentTime} - ${randomPrefecture}の${randomUser}が${randomAction}`;
-    document.getElementById("feed-message").textContent = feedMessage;
+    const message = feedMessages[currentIndex];
+    feedMessageElement.textContent = `${currentTime} - ${message}`;
+    currentIndex = (currentIndex + 1) % feedMessages.length;
 }
 
-// 5秒ごとにフィードを更新
-setInterval(updateLiveFeed, 5000);
+// メッセージ更新を10秒ごとに切り替え
+setInterval(updateFeedMessage, 10000);
 
-// 初回更新
-updateLiveFeed();
+// 初期メッセージを設定
+updateFeedMessage();
+
 
     });
 </script>
-<!-- リアルタイム報告セクション -->
-<div id="live-feed-container">
-    <h3 class="feed-title">他のユーザーの活躍</h3>
-    <div id="live-feed">
-        <span id="feed-message"></span>
+<div id="feed-container">
+    <div id="feed-title">他のユーザーの活躍</div>
+    <div id="feed-message-wrapper">
+        <div id="feed-message"></div>
     </div>
 </div>
+
 
 
 <!-- 最後に追加 -->
