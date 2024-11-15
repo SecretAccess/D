@@ -19,15 +19,24 @@
             display: none;
         }
       #quiz-container {
-    max-width: 1000px; /* 横幅を調整 */
+    max-width: 1000px;
+    width: 90%; /* 画面サイズに応じて幅を調整 */
     margin: 0 auto;
     background: rgba(255, 255, 255, 0.95);
     padding: 40px;
     border-radius: 20px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    min-height: 800px; /* 最小高さを800pxに設定 */
-    height: auto; /* コンテンツが増えた場合に高さが伸びるようにする */
+    min-height: 800px;
+    height: auto;
+    overflow: hidden; /* 枠外にはみ出す部分を隠す */
 }
+
+.question {
+    width: 100%; /* 問題の幅を囲いに合わせる */
+    box-sizing: border-box; /* パディングやボーダーを含めて幅を計算 */
+    margin: 0 auto;
+}
+
         h1 {
             font-size: 28px;
             margin-bottom: 10px;
