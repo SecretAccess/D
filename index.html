@@ -145,17 +145,23 @@
     document.addEventListener("DOMContentLoaded", () => {
         let currentQuestion = 1;
 
+        // クイズ開始
         document.getElementById("start-quiz").addEventListener("click", () => {
             document.getElementById("start-quiz").classList.add("hidden");
             showQuestion(currentQuestion);
         });
 
+        // 回答ボタンの処理
         document.querySelectorAll(".answer").forEach(button => {
             button.addEventListener("click", (event) => {
                 const isCorrect = event.target.getAttribute("data-correct") === "true";
                 if (isCorrect) {
                     currentQuestion++;
-                    currentQuestion > 3 ? showResult() : showQuestion(currentQuestion);
+                    if (currentQuestion > 3) {
+                        showResult();
+                    } else {
+                        showQuestion(currentQuestion);
+                    }
                 } else {
                     alert("不正解です。最初からやり直しです。");
                     currentQuestion = 1;
@@ -164,77 +170,80 @@
             });
         });
 
+        // プレゼントの抽選開始
         document.getElementById("claim-prize").addEventListener("click", () => {
             document.getElementById("result").classList.add("hidden");
             document.getElementById("loading").classList.remove("hidden");
             startPrizeAnimation();
         });
 
+        // プレゼント表示
         document.getElementById("reveal-prize").addEventListener("click", () => {
             document.getElementById("final-message").classList.add("hidden");
             document.getElementById("announcement").classList.remove("hidden");
-            launchConfetti(); // 紙吹雪アニメーションを開始
+            launchConfetti();
         });
 
+        // クイズ表示切替
         function showQuestion(number) {
             document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
-            document.getElementById(question-${number}).classList.remove("hidden");
+            document.getElementById(`question-${number}`).classList.remove("hidden");
         }
 
+        // 結果表示
         function showResult() {
             document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
             document.getElementById("result").classList.remove("hidden");
         }
 
-   function startPrizeAnimation() {
-    const prizes = [
-        "世界一周旅行",
-        "現金３０万円",
-        "仙台牛５KG",
-        "現金３０万円",
-        "ディズニーペアチケット",
-        "現金３０万円",
-        "仰天!?スクープ情報",
-        "現金３０万円"
-    ];
-    const prizeText = document.getElementById("prize-text");
-    let index = 0;
-    let loopCount = 0;
-    const maxLoops = 3;
-    const interval = setInterval(() => {
-        prizeText.textContent = prizes[index];
-        index = (index + 1) % prizes.length;
+        // 抽選アニメーション
+        function startPrizeAnimation() {
+            const prizes = [
+                "世界一周旅行",
+                "現金３０万円",
+                "仙台牛５KG",
+                "現金３０万円",
+                "ディズニーペアチケット",
+                "現金３０万円",
+                "仰天!?スクープ情報",
+                "現金３０万円"
+            ];
+            const prizeText = document.getElementById("prize-text");
+            let index = 0;
+            let loopCount = 0;
+            const maxLoops = 3;
+            const interval = setInterval(() => {
+                prizeText.textContent = prizes[index];
+                index = (index + 1) % prizes.length;
 
-        if (index === 0) {
-            loopCount++;
+                if (index === 0) loopCount++;
+                if (loopCount >= maxLoops && index === prizes.length - 1) {
+                    clearInterval(interval);
+                    prizeText.textContent = "仰天!?スクープ情報";
+                    prizeText.style.animation = "blink 0.5s step-end infinite";
+                    setTimeout(() => {
+                        document.getElementById("loading").classList.add("hidden");
+                        document.getElementById("final-message").classList.remove("hidden");
+                    }, 2000);
+                }
+            }, 150);
         }
-        if (loopCount >= maxLoops && index === prizes.length - 1) {
-            clearInterval(interval);
-            prizeText.textContent = "仰天!?スクープ情報";
-            prizeText.style.animation = "blink 0.5s step-end infinite";
-            setTimeout(() => {
-                document.getElementById("loading").classList.add("hidden");
-                document.getElementById("final-message").classList.remove("hidden");
-            }, 2000);
-        }
-    }, 150);
-}
 
-
+        // 紙吹雪アニメーション
         function launchConfetti() {
             const confettiContainer = document.getElementById("confetti-container");
             for (let i = 0; i < 100; i++) {
                 const confetti = document.createElement("div");
                 confetti.classList.add("confetti");
-                confetti.style.left = ${Math.random() * 100}%;
-                confetti.style.animationDelay = ${Math.random() * 2}s;
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.animationDelay = `${Math.random() * 2}s`;
                 confettiContainer.appendChild(confetti);
             }
         }
 
         // 紙吹雪のスタイル
         const style = document.createElement("style");
-        style.textContent = 
+        style.textContent = `
             @keyframes blink {
                 50% {
                     opacity: 0;
@@ -244,7 +253,7 @@
                 position: absolute;
                 width: 10px;
                 height: 10px;
-                background-color: hsl(${Math.random() * 360}, 100%, 50%);
+                background-color: hsl(${Math.floor(Math.random() * 360)}, 100%, 50%);
                 opacity: 0.8;
                 animation: fall 3s linear infinite;
             }
@@ -268,7 +277,7 @@
                 overflow: hidden;
                 z-index: 1000;
             }
-        ;
+        `;
         document.head.appendChild(style);
     });
 </script>
