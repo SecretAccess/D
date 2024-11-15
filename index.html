@@ -122,7 +122,7 @@
     white-space: nowrap;
     font-size: 16px;
     color: #333;
-    animation: scrollMessage 10s linear infinite;
+    animation: scrollMessage 7s linear infinite;
 }
 
 @keyframes scrollMessage {
@@ -338,11 +338,11 @@
         document.head.appendChild(style);
        // フィードメッセージのリスト（都道府県とイニシャルの架空のユーザー）
 const feedMessages = [
-    "東京都の鈴木さんが第3問目に挑戦中です。",
+    "東京都の斎藤さんが第3問目に挑戦中です。",
     "北海道の田中さんが賞金30万円を獲得しました！",
-    "大阪府の佐藤さんが第2問目を突破しました。",
-    "福岡県の山本さんが挑戦中です。",
-    "愛知県の高橋さんが賞金10万円を獲得しました！"
+    "大阪府の島田さんが第2問目を突破しました！",
+    "福岡県の橋本さんがスクープ情報を獲得しました！",
+    "愛知県の豊田さんが賞金30万円を獲得しました！"
 ];
 
 let currentIndex = 0;
@@ -366,7 +366,7 @@ function updateFeedMessage() {
 }
 
 // メッセージ更新を10秒ごとに切り替え
-setInterval(updateFeedMessage, 10000);
+setInterval(updateFeedMessage, 7000);
 
 // 初期メッセージを設定
 updateFeedMessage();
