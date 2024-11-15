@@ -77,37 +77,13 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
         }
-.links {
-    margin-top: 20px;
-    font-size: 14px;
-    color: #666;
-}
-.links a {
-    color: #333;
-    text-decoration: none;
-    margin: 0 10px;
-}
-.links a:hover {
-    text-decoration: underline;
-}
-
-
     </style>
 </head>
 <body>
     <div id="quiz-container">
-    <h1>🐮 牛の超難問クイズ 🐮</h1>
-    <div class="subtitle">正解率1%!? チャレンジしてみよう！</div>
-    <button id="start-quiz">スタート</button>
-
-    <!-- 追加リンク -->
-    <div id="links" class="links">
-        <a href="#" target="_blank">利用規約</a> |
-        <a href="#" target="_blank">プライバシーポリシー</a> |
-        <a href="#" target="_blank">お問い合わせ</a>
-    </div>
-</div>
-
+        <h1>🐮 牛の超難問クイズ 🐮</h1>
+        <div class="subtitle">正解率1%!? チャレンジしてみよう！</div>
+        <button id="start-quiz">スタート</button>
 
         <div id="question-1" class="question hidden">
             <h2>問題1: 牛が1日に分泌する唾液の量はどれくらい？</h2>
@@ -202,7 +178,7 @@
 
         function showQuestion(number) {
             document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
-            document.getElementById(`question-${number}`).classList.remove("hidden");
+            document.getElementById(question-${number}).classList.remove("hidden");
         }
 
         function showResult() {
@@ -210,11 +186,11 @@
             document.getElementById("result").classList.remove("hidden");
         }
 
-      function startPrizeAnimation() {
+   function startPrizeAnimation() {
     const prizes = [
-        "ハワイ旅行",
+        "世界一周旅行",
         "現金３０万円",
-        "海鮮山盛りセット",
+        "仙台牛５KG",
         "現金３０万円",
         "ディズニーペアチケット",
         "現金３０万円",
@@ -244,20 +220,21 @@
     }, 150);
 }
 
+
         function launchConfetti() {
             const confettiContainer = document.getElementById("confetti-container");
             for (let i = 0; i < 100; i++) {
                 const confetti = document.createElement("div");
                 confetti.classList.add("confetti");
-                confetti.style.left = `${Math.random() * 100}%`;
-                confetti.style.animationDelay = `${Math.random() * 2}s`;
+                confetti.style.left = ${Math.random() * 100}%;
+                confetti.style.animationDelay = ${Math.random() * 2}s;
                 confettiContainer.appendChild(confetti);
             }
         }
 
         // 紙吹雪のスタイル
         const style = document.createElement("style");
-        style.textContent = `
+        style.textContent = 
             @keyframes blink {
                 50% {
                     opacity: 0;
@@ -291,7 +268,7 @@
                 overflow: hidden;
                 z-index: 1000;
             }
-        `;
+        ;
         document.head.appendChild(style);
     });
 </script>
