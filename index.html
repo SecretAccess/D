@@ -102,10 +102,13 @@
     padding: 10px;
     border-top: 1px solid #ddd;
     background-color: #f9f9f9;
-    overflow: hidden;
-    height: 30px;
-    line-height: 30px;
+    overflow: auto; /* 追加 */
+    height: auto; /* 高さを自動にする */
+    max-height: 60px; /* 最大高さを設定（必要に応じて調整） */
+    line-height: 1.5; /* 行の高さを調整 */
+    white-space: nowrap; /* テキストの折り返しを防ぐ */
 }
+
 
 
     </style>
