@@ -153,16 +153,13 @@
 }
 
 
-        /* 新しいクラッカー風紙吹雪 */
-/* クラッカーの紙吹雪アニメーション */
-/* 左から飛ぶ紙吹雪のアニメーション */
-/* 紙吹雪の基本設定 */
+      /* 紙吹雪の基本設定 */
 .confetti {
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    opacity: 0.9;
+    opacity: 0.8;
 }
 
 /* ピンクと水色の色設定 */
@@ -176,26 +173,19 @@
 /* 舞い散る紙吹雪のアニメーション */
 @keyframes float {
     0% {
-        transform: translateX(0) translateY(0) rotate(0deg);
+        transform: translateY(0) rotate(0deg);
         opacity: 1;
     }
     50% {
-        transform: translateX(calc(-50px + 100px * random())) translateY(50vh) rotate(180deg);
+        transform: translateX(30px) translateY(50vh) rotate(180deg);
         opacity: 0.7;
     }
     100% {
-        transform: translateX(calc(-100px + 200px * random())) translateY(100vh) rotate(360deg);
+        transform: translateX(-30px) translateY(100vh) rotate(360deg);
         opacity: 0;
     }
 }
 
-.confetti {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    opacity: 0.8;
-}
 
 #reveal-prize {
     z-index: 1000; /* ボタンを前面に表示 */
@@ -471,7 +461,7 @@ document.getElementById("reveal-prize").addEventListener("click", () => {
 
         // 初期位置をランダムに設定
         confetti.style.left = `${Math.random() * 100}%`;
-        confetti.style.top = `${-10}%`; // 画面上部からスタート
+        confetti.style.top = `0%`; // 画面上部からスタート
 
         // アニメーションの遅延時間をランダムに設定
         confetti.style.animationDelay = `${Math.random() * 2}s`;
