@@ -153,7 +153,7 @@
 }
 
 
-     /* 紙吹雪の基本設定 */
+   /* 紙吹雪の基本設定 */
 .confetti {
     position: absolute;
     width: 12px;
@@ -177,23 +177,22 @@
         opacity: 1;
     }
     25% {
-        transform: translate(calc(-50px + 100px * var(--randomX)), 25vh) rotate(90deg);
+        transform: translate(calc(-100px + 200px * var(--randomX)), 25vh) rotate(90deg);
         opacity: 0.9;
     }
     50% {
-        transform: translate(calc(-100px + 200px * var(--randomX)), 50vh) rotate(180deg);
+        transform: translate(calc(-200px + 400px * var(--randomX)), 50vh) rotate(180deg);
         opacity: 0.7;
     }
     75% {
-        transform: translate(calc(-150px + 300px * var(--randomX)), 75vh) rotate(270deg);
+        transform: translate(calc(-300px + 600px * var(--randomX)), 75vh) rotate(270deg);
         opacity: 0.5;
     }
     100% {
-        transform: translate(calc(-200px + 400px * var(--randomX)), 100vh) rotate(360deg);
+        transform: translate(calc(-400px + 800px * var(--randomX)), 100vh) rotate(360deg);
         opacity: 0;
     }
 }
-
 
 #reveal-prize {
     z-index: 1000; /* ボタンを前面に表示 */
@@ -455,7 +454,7 @@ document.getElementById("reveal-prize").addEventListener("click", () => {
 });
 
 
-   function launchConfetti() {
+  function launchConfetti() {
     const confettiContainer = document.getElementById("confetti-container");
 
     for (let i = 0; i < 100; i++) {
@@ -468,21 +467,23 @@ document.getElementById("reveal-prize").addEventListener("click", () => {
 
         // 初期位置をランダムに設定
         confetti.style.left = `${Math.random() * 100}%`;
-        confetti.style.top = `0%`;
+        confetti.style.top = `-${Math.random() * 20}%`; // 画面外からスタート
 
         // ランダムな横移動のバリエーションを設定
         const randomX = Math.random();
         confetti.style.setProperty('--randomX', randomX);
 
-        // アニメーションの遅延時間をランダムに設定
+        // アニメーションの遅延時間と速度をランダムに設定
         confetti.style.animationDelay = `${Math.random() * 2}s`;
+        confetti.style.animationDuration = `${4 + Math.random() * 2}s`;
 
         // 舞い散るアニメーションを適用
-        confetti.style.animation = "float 5s linear forwards";
+        confetti.style.animation = "float linear forwards";
 
         confettiContainer.appendChild(confetti);
     }
 }
+
 
 
 
