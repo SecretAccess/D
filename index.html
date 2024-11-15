@@ -126,77 +126,90 @@
         </div>
 
         <div id="loading" class="hidden">
-            <img src="USHI.png" alt="Cow">
-            <p>ローディング中...</p>
-        </div>
+    <h2>🎁 プレゼント抽選中...</h2>
+    <p id="prize-text"></p>
+    <img src="USHI.png" alt="Cow">
+</div>
 
-        <div id="final-message" class="hidden">
-            <h2>西條利幸様へのプレゼントが決まりました。</h2>
-            <button id="reveal-prize">確認する</button>
-        </div>
+<div id="final-message" class="hidden">
+    <h2>西條利幸様へのプレゼントが決まりました。</h2>
+    <button id="reveal-prize">確認する</button>
+</div>
 
-        <div id="announcement" class="hidden">
-            <h2>🎉 2025年6月に理奈の <br>第二子が生まれます！🎉</h2>
-        </div>
-    </div>
+<div id="announcement" class="hidden">
+    <h2>🎉 2025年6月に理奈の <br>第二子が生まれます！🎉</h2>
+</div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            let currentQuestion = 1;
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        let currentQuestion = 1;
 
-            document.getElementById("start-quiz").addEventListener("click", () => {
-                document.getElementById("start-quiz").classList.add("hidden");
-                showQuestion(currentQuestion);
-            });
-
-            document.querySelectorAll(".answer").forEach(button => {
-                button.addEventListener("click", (event) => {
-                    const isCorrect = event.target.getAttribute("data-correct") === "true";
-                    if (isCorrect) {
-                        currentQuestion++;
-                        currentQuestion > 3 ? showResult() : showQuestion(currentQuestion);
-                    } else {
-                        alert("不正解です。最初からやり直しです。");
-                        currentQuestion = 1;
-                        showQuestion(currentQuestion);
-                    }
-                });
-            });
-
-            document.getElementById("claim-prize").addEventListener("click", () => {
-                document.getElementById("result").classList.add("hidden");
-                document.getElementById("message-1").classList.remove("hidden");
-            });
-
-            document.getElementById("confirm-1").addEventListener("click", () => {
-                document.getElementById("message-1").classList.add("hidden");
-                document.getElementById("message-2").classList.remove("hidden");
-            });
-
-            document.getElementById("confirm-2").addEventListener("click", () => {
-                document.getElementById("message-2").classList.add("hidden");
-                document.getElementById("loading").classList.remove("hidden");
-                setTimeout(() => {
-                    document.getElementById("loading").classList.add("hidden");
-                    document.getElementById("final-message").classList.remove("hidden");
-                }, 3000);
-            });
-
-            document.getElementById("reveal-prize").addEventListener("click", () => {
-                document.getElementById("final-message").classList.add("hidden");
-                document.getElementById("announcement").classList.remove("hidden");
-            });
-
-            function showQuestion(number) {
-                document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
-                document.getElementById(`question-${number}`).classList.remove("hidden");
-            }
-
-            function showResult() {
-                document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
-                document.getElementById("result").classList.remove("hidden");
-            }
+        document.getElementById("start-quiz").addEventListener("click", () => {
+            document.getElementById("start-quiz").classList.add("hidden");
+            showQuestion(currentQuestion);
         });
-    </script>
+
+        document.querySelectorAll(".answer").forEach(button => {
+            button.addEventListener("click", (event) => {
+                const isCorrect = event.target.getAttribute("data-correct") === "true";
+                if (isCorrect) {
+                    currentQuestion++;
+                    currentQuestion > 3 ? showResult() : showQuestion(currentQuestion);
+                } else {
+                    alert("不正解です。最初からやり直しです。");
+                    currentQuestion = 1;
+                    showQuestion(currentQuestion);
+                }
+            });
+        });
+
+        document.getElementById("claim-prize").addEventListener("click", () => {
+            document.getElementById("result").classList.add("hidden");
+            document.getElementById("loading").classList.remove("hidden");
+            startPrizeAnimation();
+        });
+
+        document.getElementById("reveal-prize").addEventListener("click", () => {
+            document.getElementById("final-message").classList.add("hidden");
+            document.getElementById("announcement").classList.remove("hidden");
+        });
+
+        function showQuestion(number) {
+            document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
+            document.getElementById(`question-${number}`).classList.remove("hidden");
+        }
+
+        function showResult() {
+            document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
+            document.getElementById("result").classList.remove("hidden");
+        }
+
+        function startPrizeAnimation() {
+            const prizes = [
+                "世界一周旅行",
+                "現金３０万円",
+                "仙台牛５KG",
+                "ディズニーペアチケット",
+                "どこよりも早い文春砲"
+            ];
+            const prizeText = document.getElementById("prize-text");
+            let index = 0;
+            const interval = setInterval(() => {
+                prizeText.textContent = prizes[index];
+                index = (index + 1) % prizes.length;
+
+                // 最後の賞品「どこよりも早い文春砲」に止まる
+                if (index === 0) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.getElementById("loading").classList.add("hidden");
+                        document.getElementById("final-message").classList.remove("hidden");
+                    }, 1000);
+                }
+            }, 150); // 高速で表示を切り替え（150ミリ秒）
+        }
+    });
+</script>
+
 </body>
 </html>
