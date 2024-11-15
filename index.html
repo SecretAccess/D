@@ -252,9 +252,27 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        let currentQuestion = 1;
-        let startTime, endTime, userTime;
+   document.addEventListener("DOMContentLoaded", () => {
+    let currentQuestion = 1;
+
+    // 受け取るボタンのクリックイベント
+    document.getElementById("claim-prize").addEventListener("click", () => {
+        document.getElementById("result").classList.add("hidden");
+        document.getElementById("message-1").classList.remove("hidden");
+    });
+
+    // 確認ボタンのクリックイベント
+    document.getElementById("confirm-1").addEventListener("click", () => {
+        document.getElementById("message-1").classList.add("hidden");
+        document.getElementById("message-2").classList.remove("hidden");
+    });
+
+    document.getElementById("confirm-2").addEventListener("click", () => {
+        document.getElementById("message-2").classList.add("hidden");
+        document.getElementById("loading").classList.remove("hidden");
+    });
+});
+
 
         // クイズ開始時にスタートタイムを記録
         document.getElementById("start-quiz").addEventListener("click", () => {
