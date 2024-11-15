@@ -156,25 +156,35 @@
         /* 新しいクラッカー風紙吹雪 */
 /* クラッカーの紙吹雪アニメーション */
 /* 左から飛ぶ紙吹雪のアニメーション */
-@keyframes flyLeft {
-    0% {
-        transform: translateX(-5%) translateY(0) scale(0.5);
-        opacity: 1;
-    }
-    100% {
-        transform: translateX(calc(-50vw + 50%)) translateY(calc(100vh + 100%)) scale(1);
-        opacity: 0;
-    }
+/* 紙吹雪の基本設定 */
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    opacity: 0.9;
 }
 
-/* 右から飛ぶ紙吹雪のアニメーション */
-@keyframes flyRight {
+/* ピンクと水色の色設定 */
+.confetti.pink {
+    background-color: #ff69b4;
+}
+.confetti.blue {
+    background-color: #87cefa;
+}
+
+/* 舞い散る紙吹雪のアニメーション */
+@keyframes float {
     0% {
-        transform: translateX(5%) translateY(0) scale(0.5);
+        transform: translateX(0) translateY(0) rotate(0deg);
         opacity: 1;
     }
+    50% {
+        transform: translateX(calc(-50px + 100px * random())) translateY(50vh) rotate(180deg);
+        opacity: 0.7;
+    }
     100% {
-        transform: translateX(calc(50vw - 50%)) translateY(calc(100vh + 100%)) scale(1);
+        transform: translateX(calc(-100px + 200px * random())) translateY(100vh) rotate(360deg);
         opacity: 0;
     }
 }
@@ -448,28 +458,28 @@ document.getElementById("reveal-prize").addEventListener("click", () => {
 
 
     // 紙吹雪アニメーション
-    function launchConfetti() {
+   function launchConfetti() {
     const confettiContainer = document.getElementById("confetti-container");
 
     for (let i = 0; i < 100; i++) {
         const confetti = document.createElement("div");
         confetti.classList.add("confetti");
 
-        const isLeft = i % 2 === 0;
-        confetti.style.left = isLeft ? '-5%' : '105%';
-        confetti.style.top = `${Math.random() * 100}%`;
-        confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+        // ピンクと水色をランダムに設定
+        const isPink = Math.random() > 0.5;
+        confetti.classList.add(isPink ? "pink" : "blue");
 
-        const colors = ['#ff69b4', '#ff1493', '#00bfff', '#87cefa'];
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        // 初期位置をランダムに設定
+        confetti.style.left = `${Math.random() * 100}%`;
+        confetti.style.top = `${-10}%`; // 画面上部からスタート
 
-        confetti.style.animation = isLeft ? 'flyLeft 1.5s forwards' : 'flyRight 1.5s forwards';
+        // アニメーションの遅延時間をランダムに設定
+        confetti.style.animationDelay = `${Math.random() * 2}s`;
+
+        // 舞い散るアニメーションを適用
+        confetti.style.animation = "float 5s linear forwards";
+
         confettiContainer.appendChild(confetti);
-
-        // 紙吹雪が終わった後に削除
-        confetti.addEventListener('animationend', () => {
-            confettiContainer.removeChild(confetti);
-        });
     }
 }
 
