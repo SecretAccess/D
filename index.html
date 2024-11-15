@@ -161,31 +161,25 @@
     }
 }
         /* 新しいクラッカー風紙吹雪 */
-.confetti {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    opacity: 0.9;
-    animation: explode 1.5s ease-out forwards;
-}
-
-/* ピンクと水色の色設定 */
-.confetti.pink {
-    background-color: #ff69b4;
-}
-.confetti.blue {
-    background-color: #87cefa;
-}
-
-/* クラッカーの飛び出すアニメーション */
-@keyframes explode {
+/* クラッカーの紙吹雪アニメーション */
+@keyframes flyLeft {
     0% {
-        transform: translate(0, 0) scale(0.5);
+        transform: translateX(-5%) translateY(0) scale(0.5);
         opacity: 1;
     }
     100% {
-        transform: translate(calc(200px * (random() - 0.5)), calc(-100vh)) scale(1);
+        transform: translateX(100vw) translateY(-100vh) scale(1);
+        opacity: 0;
+    }
+}
+
+@keyframes flyRight {
+    0% {
+        transform: translateX(5%) translateY(0) scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-100vw) translateY(-100vh) scale(1);
         opacity: 0;
     }
 }
@@ -487,7 +481,7 @@ document.getElementById("reveal-prize").addEventListener("click", () => {
         "兵庫県の田中将太さんが賞金30万円を獲得しました！",
         "大阪府の松本大志さんが第2問目を突破しました！",
         "神奈川県の小泉新三郎さんが第2問目で敗退しました！",
-        "県の小泉新三郎さんが第2問目で敗退しました！",
+        "北海道の大泉洋二さんが最終問題で敗退しました！",
         "高知県の広末涼さんが第1問目を突破しました！",
         "大阪府の浜口雅功さんが第2問目を突破しました！",
         "長崎県の福川雅治さんが最新スマートフォンを獲得しました！",
