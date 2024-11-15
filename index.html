@@ -153,16 +153,16 @@
 }
 
 
-   /* 紙吹雪の基本設定 */
+ /* 紙吹雪のスタイル */
 .confetti {
-    position: absolute;
-    width: 12px;
-    height: 12px;
+    position: fixed;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    opacity: 0.8;
+    animation: fall 3s linear infinite;
 }
 
-/* ピンクと水色の色設定 */
+/* ピンクと水色の設定 */
 .confetti.pink {
     background-color: #ff69b4;
 }
@@ -170,26 +170,14 @@
     background-color: #87cefa;
 }
 
-/* 舞い散る紙吹雪のアニメーション */
-@keyframes float {
+/* 紙吹雪のアニメーション */
+@keyframes fall {
     0% {
-        transform: translate(0, 0) rotate(0deg);
+        transform: translateY(-100px) rotate(0deg);
         opacity: 1;
     }
-    25% {
-        transform: translate(calc(-100px + 200px * var(--randomX)), 25vh) rotate(90deg);
-        opacity: 0.9;
-    }
-    50% {
-        transform: translate(calc(-200px + 400px * var(--randomX)), 50vh) rotate(180deg);
-        opacity: 0.7;
-    }
-    75% {
-        transform: translate(calc(-300px + 600px * var(--randomX)), 75vh) rotate(270deg);
-        opacity: 0.5;
-    }
     100% {
-        transform: translate(calc(-400px + 800px * var(--randomX)), 100vh) rotate(360deg);
+        transform: translateY(100vh) rotate(360deg);
         opacity: 0;
     }
 }
@@ -466,19 +454,12 @@ document.getElementById("reveal-prize").addEventListener("click", () => {
         confetti.classList.add(isPink ? "pink" : "blue");
 
         // 初期位置をランダムに設定
-        confetti.style.left = `${Math.random() * 100}%`;
-        confetti.style.top = `-${Math.random() * 20}%`; // 画面外からスタート
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.top = `${-10}px`; // 画面上部からスタート
 
-        // ランダムな横移動のバリエーションを設定
-        const randomX = Math.random();
-        confetti.style.setProperty('--randomX', randomX);
-
-        // アニメーションの遅延時間と速度をランダムに設定
+        // アニメーションの遅延時間をランダムに設定
         confetti.style.animationDelay = `${Math.random() * 2}s`;
-        confetti.style.animationDuration = `${4 + Math.random() * 2}s`;
-
-        // 舞い散るアニメーションを適用
-        confetti.style.animation = "float linear forwards";
+        confetti.style.animationDuration = `${3 + Math.random() * 2}s`;
 
         confettiContainer.appendChild(confetti);
     }
