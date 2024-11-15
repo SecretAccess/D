@@ -294,25 +294,39 @@
     function startPrizeSelection() {
         const prizeText = document.getElementById("prize-text");
         let index = 0;
+        let count = 0;
+        const totalRounds = 3; // リストを3周回る
 
-        // 3秒間、リスト内のプレゼントをランダムに表示
+        // プレゼントを高速に表示する
         const selectionInterval = setInterval(() => {
-            // ランダムにプレゼントを表示
-            const randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
-            prizeText.textContent = `🎁 ${randomPrize}が選ばれました！ 🎉`;
-        }, 200);
+            // リストのアイテムを順番に表示
+            prizeText.textContent = `🎁 ${prizes[index]}が選ばれました！ 🎉`;
+            index = (index + 1) % prizes.length;
 
-        // 最終的に「仰天!?驚愕スクープ」を表示
+            // 3周したら抽選終了
+            if (count >= prizes.length * totalRounds) {
+                clearInterval(selectionInterval);
+                showFinalPrize(prizeText);
+            }
+            count++;
+        }, 100); // 0.1秒ごとに表示
+    }
+
+    // 最後に「仰天!?驚愕スクープ」を選び、点滅表示
+    function showFinalPrize(prizeText) {
+        prizeText.textContent = `🎁 仰天!?驚愕スクープが選ばれました！ 🎉`;
+        prizeText.classList.add("blink");
+
+        // 点滅効果を1.5秒間表示
         setTimeout(() => {
-            clearInterval(selectionInterval);
-            prizeText.textContent = `🎁 仰天!?驚愕スクープが選ばれました！ 🎉`;
+            prizeText.classList.remove("blink");
 
             // 3秒後に最終メッセージ画面に進む
             setTimeout(() => {
                 document.getElementById("loading").classList.add("hidden");
                 document.getElementById("final-message").classList.remove("hidden");
             }, 3000);
-        }, 3000);
+        }, 1500);
     }
 
     // 回答ボタンの処理
@@ -349,6 +363,20 @@
 
         setTimeout(startRankingAnimation, 1000);
     }
+
+    // 点滅効果のCSSを追加
+    const style = document.createElement("style");
+    style.textContent = `
+        .blink {
+            animation: blink 0.5s step-start infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+
+
 
     // 結果画面の表示
     function showResult() {
