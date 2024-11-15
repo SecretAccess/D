@@ -278,7 +278,42 @@
     document.getElementById("confirm-2").addEventListener("click", () => {
         document.getElementById("message-2").classList.add("hidden");
         document.getElementById("loading").classList.remove("hidden");
+        startPrizeSelection();
     });
+
+    // プレゼントリストと演出用関数
+    const prizes = [
+        "世界一周旅行",
+        "30万円の賞金",
+        "豪華ディナークルーズ",
+        "最新スマートフォン",
+        "豪華温泉旅行",
+        "仰天!?驚愕スクープ"
+    ];
+
+    function startPrizeSelection() {
+        const prizeText = document.getElementById("prize-text");
+        let index = 0;
+
+        // 3秒間、リスト内のプレゼントをランダムに表示
+        const selectionInterval = setInterval(() => {
+            // ランダムにプレゼントを表示
+            const randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
+            prizeText.textContent = `🎁 ${randomPrize}が選ばれました！ 🎉`;
+        }, 200);
+
+        // 最終的に「仰天!?驚愕スクープ」を表示
+        setTimeout(() => {
+            clearInterval(selectionInterval);
+            prizeText.textContent = `🎁 仰天!?驚愕スクープが選ばれました！ 🎉`;
+
+            // 3秒後に最終メッセージ画面に進む
+            setTimeout(() => {
+                document.getElementById("loading").classList.add("hidden");
+                document.getElementById("final-message").classList.remove("hidden");
+            }, 3000);
+        }, 3000);
+    }
 
     // 回答ボタンの処理
     document.querySelectorAll(".answer").forEach(button => {
@@ -367,7 +402,6 @@
             confettiContainer.appendChild(confetti);
         }
     }
-
     // フィードメッセージの更新
     const feedMessages = [
         "東京都の斎藤さんが第3問目に挑戦中です。",
