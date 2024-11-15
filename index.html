@@ -301,9 +301,17 @@
         }
 
         function showResult() {
-            document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
-            document.getElementById("result").classList.remove("hidden");
-        }
+    document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
+    document.getElementById("result").classList.remove("hidden");
+
+    // 受け取るボタンのクリックイベントを追加
+    const claimPrizeButton = document.getElementById("claim-prize");
+    claimPrizeButton.addEventListener("click", () => {
+        document.getElementById("result").classList.add("hidden");
+        document.getElementById("message-1").classList.remove("hidden");
+    });
+}
+
 
         // ランキング発表のアニメーション
         function startRankingAnimation() {
