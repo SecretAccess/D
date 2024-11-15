@@ -95,6 +95,18 @@
 .footer-links a:hover {
     text-decoration: underline;
 }
+        .live-feed {
+    font-size: 14px;
+    color: #555;
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background-color: #f9f9f9;
+    overflow: hidden;
+    height: 30px;
+    line-height: 30px;
+}
+
 
     </style>
 </head>
@@ -298,8 +310,47 @@
             }
         `;
         document.head.appendChild(style);
+        const users = ["鈴木さん", "佐藤さん", "田中さん", "山本さん", "伊藤さん"];
+const prefectures = ["東京都", "大阪府", "愛知県", "福岡県", "北海道"];
+const actions = [
+    "第1問目に挑戦中です",
+    "第2問目に挑戦中です",
+    "第3問目に挑戦中です",
+    "賞金30万円を獲得しました！",
+    "全問正解しました！"
+];
+
+// 現在時刻を取得する関数
+function getCurrentTime() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+}
+
+// ライブフィードを更新する関数
+function updateLiveFeed() {
+    const randomUser = users[Math.floor(Math.random() * users.length)];
+    const randomPrefecture = prefectures[Math.floor(Math.random() * prefectures.length)];
+    const randomAction = actions[Math.floor(Math.random() * actions.length)];
+    const currentTime = getCurrentTime();
+
+    const feedMessage = `${currentTime} - ${randomPrefecture}の${randomUser}が${randomAction}`;
+    document.getElementById("feed-message").textContent = feedMessage;
+}
+
+// 5秒ごとにフィードを更新
+setInterval(updateLiveFeed, 5000);
+
+// 初回更新
+updateLiveFeed();
+
     });
 </script>
+<div id="live-feed" class="live-feed">
+    <p id="feed-message">リアルタイム更新中...</p>
+</div>
 
 
 <!-- 最後に追加 -->
