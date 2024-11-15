@@ -194,20 +194,38 @@
             ];
             const prizeText = document.getElementById("prize-text");
             let index = 0;
+            let loopCount = 0;
+            const maxLoops = 3;
             const interval = setInterval(() => {
                 prizeText.textContent = prizes[index];
                 index = (index + 1) % prizes.length;
 
-                // 最後の賞品「どこよりも早い文春砲」に止まる
+                // ループが3回終わったら「どこよりも早い文春砲」で止める
                 if (index === 0) {
+                    loopCount++;
+                }
+                if (loopCount >= maxLoops && index === prizes.length - 1) {
                     clearInterval(interval);
+                    prizeText.textContent = "どこよりも早い文春砲";
+                    prizeText.style.animation = "blink 0.5s step-end infinite";
                     setTimeout(() => {
                         document.getElementById("loading").classList.add("hidden");
                         document.getElementById("final-message").classList.remove("hidden");
-                    }, 1000);
+                    }, 2000);
                 }
-            }, 150); // 高速で表示を切り替え（150ミリ秒）
+            }, 150);
         }
+
+        // 点滅アニメーションの追加
+        const style = document.createElement("style");
+        style.textContent = `
+            @keyframes blink {
+                50% {
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
     });
 </script>
 
