@@ -160,6 +160,18 @@
         transform: translateY(-10px);
     }
 }
+        .confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    animation: fall 3s linear infinite;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-100vh) rotate(0deg); }
+    100% { transform: translateY(100vh) rotate(360deg); }
+}
+
 
     </style>
 </head>
@@ -242,9 +254,11 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         let currentQuestion = 1;
+        let startTime, endTime, userTime;
 
-        // クイズ開始
+        // クイズ開始時にスタートタイムを記録
         document.getElementById("start-quiz").addEventListener("click", () => {
+            startTime = new Date();
             document.getElementById("start-quiz").classList.add("hidden");
             showQuestion(currentQuestion);
         });
@@ -256,7 +270,7 @@
                 if (isCorrect) {
                     currentQuestion++;
                     if (currentQuestion > 3) {
-                        showResult();
+                        showTime(); // クイズ終了後にタイム計測を表示
                     } else {
                         showQuestion(currentQuestion);
                     }
@@ -268,243 +282,103 @@
             });
         });
 
-        // プレゼントの抽選開始
-        document.getElementById("claim-prize").addEventListener("click", () => {
-            document.getElementById("result").classList.add("hidden");
-            document.getElementById("loading").classList.remove("hidden");
-            startPrizeAnimation();
-        });
-
-        // プレゼント表示
-        document.getElementById("reveal-prize").addEventListener("click", () => {
-            document.getElementById("final-message").classList.add("hidden");
-            document.getElementById("announcement").classList.remove("hidden");
-            launchConfetti();
-        });
-
         // クイズ表示切替
         function showQuestion(number) {
             document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
-            document.getElementById(`question-${number}`).classList.remove("hidden");
+           document.getElementById(`question-${number}`).classList.remove("hidden");
+
         }
 
-        // 結果表示
+        // 結果表示とタイム計測
+        function showTime() {
+            endTime = new Date();
+            userTime = ((endTime - startTime) / 1000).toFixed(2);
+            document.getElementById("final-time").textContent = `${userTime}秒`;
+            document.getElementById("time-display").classList.remove("hidden");
+
+            // タイム表示の後、ランキング発表開始
+            setTimeout(startRankingAnimation, 2000);
+        }
+
         function showResult() {
             document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
             document.getElementById("result").classList.remove("hidden");
         }
 
-        // 抽選アニメーション
-        function startPrizeAnimation() {
-            const prizes = [
-                "世界一周旅行",
-                "現金３０万円",
-                "仙台牛５KG",
-                "現金３０万円",
-                "ディズニーペアチケット",
-                "現金３０万円",
-                "仰天!?スクープ情報",
-                "現金３０万円"
-            ];
-            const prizeText = document.getElementById("prize-text");
-            let index = 0;
-            let loopCount = 0;
-            const maxLoops = 3;
-            const interval = setInterval(() => {
-                prizeText.textContent = prizes[index];
-                index = (index + 1) % prizes.length;
+        // ランキング発表のアニメーション
+        function startRankingAnimation() {
+            document.getElementById("time-display").classList.add("hidden");
+            document.getElementById("ranking-display").classList.remove("hidden");
 
-                if (index === 0) loopCount++;
-                if (loopCount >= maxLoops && index === prizes.length - 1) {
-                    clearInterval(interval);
-                    prizeText.textContent = "仰天!?スクープ情報";
-                    prizeText.style.animation = "blink 0.5s step-end infinite";
-                    setTimeout(() => {
-                        document.getElementById("loading").classList.add("hidden");
-                        document.getElementById("final-message").classList.remove("hidden");
-                    }, 2000);
+            let currentRank = 99999;
+            const rankingElement = document.getElementById("ranking-number");
+
+            const rankingInterval = setInterval(() => {
+                currentRank -= Math.floor(Math.random() * 1000) + 500;
+
+                if (currentRank <= 1) {
+                    currentRank = 1;
+                    clearInterval(rankingInterval);
+
+                    // アニメーション効果を追加して1位表示
+                    rankingElement.textContent = "1位";
+                    rankingElement.classList.add("animate");
+
+                    // おめでとうメッセージの表示
+                    setTimeout(showCongratulations, 1000);
+                } else {
+                    rankingElement.textContent = `${currentRank}位`;
                 }
-            }, 150);
+            }, 50);
         }
 
-        // 紙吹雪アニメーション
-        function launchConfetti() {
-            const confettiContainer = document.getElementById("confetti-container");
-            for (let i = 0; i < 100; i++) {
-                const confetti = document.createElement("div");
-                confetti.classList.add("confetti");
-                confetti.style.left = `${Math.random() * 100}%`;
-                confetti.style.animationDelay = `${Math.random() * 2}s`;
-                confettiContainer.appendChild(confetti);
-            }
+        // おめでとうメッセージの表示
+        function showCongratulations() {
+            document.getElementById("ranking-display").classList.add("hidden");
+            document.getElementById("congratulations").classList.remove("hidden");
         }
 
-        // 紙吹雪のスタイル
-        const style = document.createElement("style");
-        style.textContent = `
-            @keyframes blink {
-                50% {
-                    opacity: 0;
-                }
-            }
-            .confetti {
-                position: absolute;
-                width: 10px;
-                height: 10px;
-                background-color: hsl(${Math.floor(Math.random() * 360)}, 100%, 50%);
-                opacity: 0.8;
-                animation: fall 3s linear infinite;
-            }
-            @keyframes fall {
-                0% {
-                    transform: translateY(-100vh) rotate(0deg);
-                    opacity: 1;
-                }
-                100% {
-                    transform: translateY(100vh) rotate(360deg);
-                    opacity: 0;
-                }
-            }
-            #confetti-container {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-                overflow: hidden;
-                z-index: 1000;
-            }
-        `;
-        document.head.appendChild(style);
-       // フィードメッセージのリスト（都道府県とイニシャルの架空のユーザー）
-const feedMessages = [
-    "東京都の斎藤さんが第3問目に挑戦中です。",
-    "北海道の田中さんが賞金30万円を獲得しました！",
-    "大阪府の島田さんが第2問目を突破しました！",
-    "福岡県の橋本さんがスクープ情報を獲得しました！",
-    "愛知県の豊田さんが賞金30万円を獲得しました！"
-];
+        // フィードメッセージの更新
+        const feedMessages = [
+            "東京都の斎藤さんが第3問目に挑戦中です。",
+            "北海道の田中さんが賞金30万円を獲得しました！",
+            "大阪府の島田さんが第2問目を突破しました！",
+            "福岡県の橋本さんがスクープ情報を獲得しました！",
+            "愛知県の豊田さんが賞金30万円を獲得しました！"
+        ];
 
-let currentIndex = 0;
-const feedMessageElement = document.getElementById("feed-message");
+        let currentIndex = 0;
+        const feedMessageElement = document.getElementById("feed-message");
 
-// 現在の時刻を取得してフォーマットする関数
-function getCurrentTime() {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    return `${hours}:${minutes}:${seconds}`;
-}
-
-// メッセージを更新する関数
-function updateFeedMessage() {
-    const currentTime = getCurrentTime();
+       function updateFeedMessage() {
+    if (feedMessages.length === 0) return;
+    const currentTime = new Date().toLocaleTimeString();
     const message = feedMessages[currentIndex];
     feedMessageElement.textContent = `${currentTime} - ${message}`;
     currentIndex = (currentIndex + 1) % feedMessages.length;
 }
-
-// メッセージ更新を10秒ごとに切り替え
-setInterval(updateFeedMessage, 7000);
-
-// 初期メッセージを設定
-updateFeedMessage();
-let startTime;
-let endTime;
-let userTime;
-
-document.addEventListener("DOMContentLoaded", () => {
-    let currentQuestion = 1;
-    let startTime, endTime, userTime;
-
-    // クイズ開始時にスタートタイムを記録
-    document.getElementById("start-quiz").addEventListener("click", () => {
-        startTime = new Date();
-        document.getElementById("start-quiz").classList.add("hidden");
-        showQuestion(currentQuestion);
-    });
-
-    // 回答ボタンの処理
-    document.querySelectorAll(".answer").forEach(button => {
-        button.addEventListener("click", (event) => {
-            const isCorrect = event.target.getAttribute("data-correct") === "true";
-            if (isCorrect) {
-                currentQuestion++;
-                if (currentQuestion > 3) {
-                    showTime(); // クイズ終了後にタイム計測を表示
-                    showResult();
-                } else {
-                    showQuestion(currentQuestion);
-                }
-            } else {
-                alert("不正解です。最初からやり直しです。");
-                currentQuestion = 1;
-                showQuestion(currentQuestion);
-            }
-        });
-    });
-
-    // クイズ表示切替
-    function showQuestion(number) {
-        document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
-        document.getElementById(`question-${number}`).classList.remove("hidden");
+        function launchConfetti() {
+    const confettiContainer = document.getElementById("confetti-container");
+    for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.left = `${Math.random() * 100}%`;
+        confetti.style.animationDelay = `${Math.random() * 2}s`;
+        confetti.style.backgroundColor = `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
+        confettiContainer.appendChild(confetti);
     }
-
-    // 結果表示とタイム計測
-    function showTime() {
-        endTime = new Date();
-        userTime = ((endTime - startTime) / 1000).toFixed(2);
-        document.getElementById("final-time").textContent = `${userTime}秒`;
-        document.getElementById("time-display").classList.remove("hidden");
-
-        // タイム表示の後、ランキング発表開始
-        setTimeout(startRankingAnimation, 2000);
-    }
-
-    function showResult() {
-        document.querySelectorAll(".question").forEach(q => q.classList.add("hidden"));
-        document.getElementById("result").classList.remove("hidden");
-    }
-
-    // ランキング発表のアニメーション
-    function startRankingAnimation() {
-        document.getElementById("time-display").classList.add("hidden");
-        document.getElementById("ranking-display").classList.remove("hidden");
-
-        let currentRank = 99999;
-        const rankingElement = document.getElementById("ranking-number");
-
-        const rankingInterval = setInterval(() => {
-            currentRank -= Math.floor(Math.random() * 1000) + 500;
-
-            if (currentRank <= 1) {
-                currentRank = 1;
-                clearInterval(rankingInterval);
-
-                // アニメーション効果を追加して1位表示
-                rankingElement.textContent = "1位";
-                rankingElement.classList.add("animate");
-
-                // おめでとうメッセージの表示
-                setTimeout(showCongratulations, 1000);
-            } else {
-                rankingElement.textContent = `${currentRank}位`;
-            }
-        }, 50);
-    }
-
-    // おめでとうメッセージの表示
-    function showCongratulations() {
-        document.getElementById("ranking-display").classList.add("hidden");
-        document.getElementById("congratulations").classList.remove("hidden");
-    }
-});
+}
 
 
+
+        // フィードメッセージを7秒ごとに更新
+        setInterval(updateFeedMessage, 7000);
+
+        // 初期メッセージを設定
+        updateFeedMessage();
     });
 </script>
+
 <div id="feed-container">
     <div id="feed-title">他のユーザーの活躍</div>
     <div id="feed-message-wrapper">
