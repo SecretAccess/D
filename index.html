@@ -153,7 +153,7 @@
 }
 
 
-      /* 紙吹雪の基本設定 */
+     /* 紙吹雪の基本設定 */
 .confetti {
     position: absolute;
     width: 12px;
@@ -173,15 +173,23 @@
 /* 舞い散る紙吹雪のアニメーション */
 @keyframes float {
     0% {
-        transform: translateY(0) rotate(0deg);
+        transform: translate(0, 0) rotate(0deg);
         opacity: 1;
     }
+    25% {
+        transform: translate(calc(-50px + 100px * var(--randomX)), 25vh) rotate(90deg);
+        opacity: 0.9;
+    }
     50% {
-        transform: translateX(30px) translateY(50vh) rotate(180deg);
+        transform: translate(calc(-100px + 200px * var(--randomX)), 50vh) rotate(180deg);
         opacity: 0.7;
     }
+    75% {
+        transform: translate(calc(-150px + 300px * var(--randomX)), 75vh) rotate(270deg);
+        opacity: 0.5;
+    }
     100% {
-        transform: translateX(-30px) translateY(100vh) rotate(360deg);
+        transform: translate(calc(-200px + 400px * var(--randomX)), 100vh) rotate(360deg);
         opacity: 0;
     }
 }
@@ -447,7 +455,6 @@ document.getElementById("reveal-prize").addEventListener("click", () => {
 });
 
 
-    // 紙吹雪アニメーション
    function launchConfetti() {
     const confettiContainer = document.getElementById("confetti-container");
 
@@ -461,7 +468,11 @@ document.getElementById("reveal-prize").addEventListener("click", () => {
 
         // 初期位置をランダムに設定
         confetti.style.left = `${Math.random() * 100}%`;
-        confetti.style.top = `0%`; // 画面上部からスタート
+        confetti.style.top = `0%`;
+
+        // ランダムな横移動のバリエーションを設定
+        const randomX = Math.random();
+        confetti.style.setProperty('--randomX', randomX);
 
         // アニメーションの遅延時間をランダムに設定
         confetti.style.animationDelay = `${Math.random() * 2}s`;
@@ -472,6 +483,7 @@ document.getElementById("reveal-prize").addEventListener("click", () => {
         confettiContainer.appendChild(confetti);
     }
 }
+
 
 
     // フィードメッセージの更新
