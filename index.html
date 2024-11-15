@@ -77,13 +77,37 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
         }
+.links {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+.links a {
+    color: #333;
+    text-decoration: none;
+    margin: 0 10px;
+}
+.links a:hover {
+    text-decoration: underline;
+}
+
+
     </style>
 </head>
 <body>
     <div id="quiz-container">
-        <h1>🐮 牛の超難問クイズ </h1>
-        <div class="subtitle">正解率1%!? チャレンジしてみよう！</div>
-        <button id="start-quiz">スタート</button>
+    <h1>🐮 牛の超難問クイズ 🐮</h1>
+    <div class="subtitle">正解率1%!? チャレンジしてみよう！</div>
+    <button id="start-quiz">スタート</button>
+
+    <!-- 追加リンク -->
+    <div id="links" class="links">
+        <a href="#" target="_blank">利用規約</a> |
+        <a href="#" target="_blank">プライバシーポリシー</a> |
+        <a href="#" target="_blank">お問い合わせ</a>
+    </div>
+</div>
+
 
         <div id="question-1" class="question hidden">
             <h2>問題1: 牛が1日に分泌する唾液の量はどれくらい？</h2>
