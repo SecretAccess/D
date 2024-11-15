@@ -160,17 +160,36 @@
         transform: translateY(-10px);
     }
 }
-        .confetti {
+        /* 新しいクラッカー風紙吹雪 */
+.confetti {
     position: absolute;
     width: 10px;
     height: 10px;
-    animation: fall 3s linear infinite;
+    border-radius: 50%;
+    opacity: 0.9;
+    animation: explode 1.5s ease-out forwards;
 }
 
-@keyframes fall {
-    0% { transform: translateY(-100vh) rotate(0deg); }
-    100% { transform: translateY(100vh) rotate(360deg); }
+/* ピンクと水色の色設定 */
+.confetti.pink {
+    background-color: #ff69b4;
 }
+.confetti.blue {
+    background-color: #87cefa;
+}
+
+/* クラッカーの飛び出すアニメーション */
+@keyframes explode {
+    0% {
+        transform: translate(0, 0) scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(calc(200px * (random() - 0.5)), calc(-100vh)) scale(1);
+        opacity: 0;
+    }
+}
+
 #reveal-prize {
     z-index: 1000; /* ボタンを前面に表示 */
 }
@@ -194,8 +213,8 @@
 
         <div id="question-2" class="question hidden">
             <h2>問題2: 牛の胃袋はいくつある？</h2>
-            <button class="answer" data-correct="false">A. 202</button>
-            <button class="answer" data-correct="false">B. 327</button>
+            <button class="answer" data-correct="false">A. 327</button>
+            <button class="answer" data-correct="false">B. 202</button>
             <button class="answer" data-correct="true">C. 4</button>
             <button class="answer" data-correct="false">D. 胃袋は存在しない</button>
         </div>
@@ -433,16 +452,35 @@ document.getElementById("reveal-prize").addEventListener("click", () => {
 
     // 紙吹雪アニメーション
     function launchConfetti() {
-        const confettiContainer = document.getElementById("confetti-container");
-        for (let i = 0; i < 100; i++) {
-            const confetti = document.createElement("div");
-            confetti.classList.add("confetti");
-            confetti.style.left = `${Math.random() * 100}%`;
-            confetti.style.animationDelay = `${Math.random() * 2}s`;
-            confetti.style.backgroundColor = `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
-            confettiContainer.appendChild(confetti);
-        }
+    const confettiContainer = document.getElementById("confetti-container");
+
+    for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+
+        // 左側から飛ぶ紙吹雪と右側から飛ぶ紙吹雪を分ける
+        const isLeft = i % 2 === 0;
+
+        // 横位置を画面の左右に設定
+        confetti.style.left = isLeft ? '-5%' : '105%';
+
+        // 縦位置をランダムに設定
+        confetti.style.top = `${Math.random() * 100}%`;
+
+        // アニメーションの遅延時間をランダムに設定
+        confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+
+        // ピンクと水色のランダムな色を設定
+        const colors = ['#ff69b4', '#ff1493', '#00bfff', '#87cefa'];
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+        // クラッカー風のアニメーション効果を追加
+        confetti.style.animation = isLeft ? 'flyLeft 1.5s forwards' : 'flyRight 1.5s forwards';
+
+        confettiContainer.appendChild(confetti);
     }
+}
+
     // フィードメッセージの更新
     const feedMessages = [
         "長崎県の川田春奈さんが第3問目に挑戦中です。",
