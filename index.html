@@ -133,6 +133,33 @@
         transform: translateX(-100%);
     }
 }
+/* ランキング表示のアニメーション */
+#ranking-number {
+    font-size: 32px;
+    font-weight: bold;
+    transition: transform 0.3s ease-in-out;
+}
+
+#ranking-number.animate {
+    transform: scale(1.5);
+    color: #ff6347;
+}
+
+/* おめでとうメッセージのスタイル */
+#congratulations {
+    font-size: 28px;
+    color: #ff4500;
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
 
     </style>
 </head>
@@ -165,6 +192,20 @@
             <button class="answer" data-correct="false">C. GPS管理</button>
             <button class="answer" data-correct="false">D. おしゃれ</button>
         </div>
+<div id="time-display" class="hidden">
+    <h2>あなたのタイムは...</h2>
+    <p id="final-time"></p>
+</div>
+
+<div id="ranking-display" class="hidden">
+    <h2>ランキング発表！</h2>
+    <p id="ranking-number">99999位</p>
+</div>
+
+<div id="congratulations" class="hidden">
+    <h2>🎉 おめでとうございます！ 🎉</h2>
+    <p>見事1位です！</p>
+</div>
 
         <div id="result" class="hidden">
             <h2>おめでとうございます！</h2>
@@ -370,6 +411,58 @@ setInterval(updateFeedMessage, 7000);
 
 // 初期メッセージを設定
 updateFeedMessage();
+let startTime;
+let endTime;
+let userTime;
+
+// クイズ開始時にスタートタイムを記録
+document.getElementById("start-quiz").addEventListener("click", () => {
+    startTime = new Date();
+});
+
+// クイズが終了したらタイムを計測して表示
+function showTime() {
+    endTime = new Date();
+    userTime = ((endTime - startTime) / 1000).toFixed(2);
+    document.getElementById("final-time").textContent = `${userTime}秒`;
+    document.getElementById("time-display").classList.remove("hidden");
+
+    // タイム表示の後、ランキング演出を開始
+    setTimeout(startRankingAnimation, 2000);
+}
+
+// ランキング発表のアニメーション
+function startRankingAnimation() {
+    document.getElementById("time-display").classList.add("hidden");
+    document.getElementById("ranking-display").classList.remove("hidden");
+
+    let currentRank = 99999;
+    const rankingElement = document.getElementById("ranking-number");
+
+    const rankingInterval = setInterval(() => {
+        currentRank -= Math.floor(Math.random() * 1000) + 500;
+
+        if (currentRank <= 1) {
+            currentRank = 1;
+            clearInterval(rankingInterval);
+
+            // アニメーション効果を追加して1位表示
+            rankingElement.textContent = "1位";
+            rankingElement.classList.add("animate");
+
+            // おめでとうメッセージの表示
+            setTimeout(showCongratulations, 1000);
+        } else {
+            rankingElement.textContent = `${currentRank}位`;
+        }
+    }, 50);
+}
+
+// おめでとうメッセージの表示
+function showCongratulations() {
+    document.getElementById("ranking-display").classList.add("hidden");
+    document.getElementById("congratulations").classList.remove("hidden");
+}
 
 
     });
